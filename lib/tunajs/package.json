@@ -1,0 +1,66 @@
+{
+  "_from": "tunajs@^1.0.8",
+  "_id": "tunajs@1.0.11",
+  "_inBundle": false,
+  "_integrity": "sha512-T50vtdd8sd5gjSbgbw3Uf5WrckTuZFDCmBT1JUnQ5yZoXp2++f8kGtN+gU6h03D9EBcIY7qzkxSfvSruPcRgxg==",
+  "_location": "/tunajs",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "tunajs@^1.0.8",
+    "name": "tunajs",
+    "escapedName": "tunajs",
+    "rawSpec": "^1.0.8",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.8"
+  },
+  "_requiredBy": [
+    "/web-audio-daw"
+  ],
+  "_resolved": "https://registry.npmjs.org/tunajs/-/tunajs-1.0.11.tgz",
+  "_shasum": "b2a258e2e136da9e4cb394249ace4003d6554206",
+  "_spec": "tunajs@^1.0.8",
+  "_where": "C:\\Users\\vfere\\OneDrive\\Asztali gép\\cucc\\HTML\\0004\\node_modules\\web-audio-daw",
+  "author": {
+    "name": "Oskar Eriksson"
+  },
+  "bugs": {
+    "url": "https://github.com/Theodeus/tuna/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "npm": "^6.10.2"
+  },
+  "deprecated": false,
+  "description": "Audio effects library for the Web Audio API",
+  "devDependencies": {
+    "eslint": "^5.6.1",
+    "express": "^4.17.1",
+    "uglify-js": "^3.4.9"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "homepage": "https://github.com/Theodeus/tuna#readme",
+  "keywords": [
+    "web audio",
+    "audio effects",
+    "tuna",
+    "tunajs",
+    "tuna.js"
+  ],
+  "license": "MIT",
+  "main": "tuna.js",
+  "name": "tunajs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Theodeus/tuna.git"
+  },
+  "scripts": {
+    "patch": "npm run uglify && npm version patch && npm publish",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "uglify": "uglifyjs tuna.js -o tuna-min.js"
+  },
+  "version": "1.0.11"
+}
