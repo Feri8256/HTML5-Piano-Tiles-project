@@ -38,7 +38,7 @@
         {
             "filename":"13.json",
             "name":"Dance of The Sugar Fairy",
-            "performer":"teszt"
+            "performer":"Tchaikovsky"
         },
         {
             "filename":"11.json",
@@ -55,11 +55,15 @@
             "name":"Carmen Overture",
             "performer":"Bizet"
         },
-        
         {
             "filename":"04.json",
             "name":"Cancan",
             "performer":"Jacques Offenbach"
+        },
+        {
+            "filename":"14.json",
+            "name":"Waltz in A Minor",
+            "performer":"Chopin"
         }
     ]
 }
