@@ -14,11 +14,13 @@ A jövőben elképzelhető, hogy a lista még bővülni fog.
 5. Francois Joseph Gossec - Gavotte
 6. Beethoven - The Ruins of Athens No.4
 7. Ferdinand Beyer - Beyer No.8
-8. Tchaikovsky - Dance of the Sugar Plum Fairy
-9. Joseph Kuffner - Polka
-10. Liszt - Hungarian Rhapsody No.6
-11. Bizet - Carmen Overture
-12. Jacques Offenbach - Cancan   
+8. Chopin - Waltz in A Minor
+9. Tchaikovsky - Dance of the Sugar Plum Fairy
+10. Joseph Kuffner - Polka
+11. Liszt - Hungarian Rhapsody No.6
+12. Bizet - Carmen Overture
+13. Jacques Offenbach - Cancan
+14. Ievan Polkka   
 
 ### Billenytű funkciók   
 **D**, **F**, **J**, **K** - Játék közbeni találati billentyűk 1-től a 4-edik oszlopig.   
