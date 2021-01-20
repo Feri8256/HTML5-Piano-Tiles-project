@@ -10,15 +10,15 @@ function keyPressed() {
         PauseState = false;
     }
 
-    let chkKey;
     if (ScreenStates.Screen_Game) {
-        chkKey = tiles[currentTile+1].tilePos;
+        let chkKey;
+        if (tiles[currentTile+1].y >= HitLineOffset) chkKey = tiles[currentTile+1].tilePos;
+        if (key === HitKeys[chkKey] && tiles[currentTile+1].y >= HitLineOffset) {
+            DecodeNote(tiles[currentTile+1].tileNote.n, false, tiles[currentTile+1].tapped);
+            tiles[currentTile+1].tapped = true;
+        }
     }
-    
-    if (key === HitKeys[chkKey] && tiles[currentTile+1] && tiles[currentTile].y >= HitLineOffset) {
-        DecodeNote(tiles[currentTile+1].tileNote.n, false, tiles[currentTile+1].tapped);
-        tiles[currentTile+1].tapped = true;
-    }
+
 
     if (key === 'r') {
         if (FailState){

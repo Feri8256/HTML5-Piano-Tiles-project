@@ -1,8 +1,8 @@
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
-const HitLineOffset = 380; 
-const HitWindowAddHeight = 100; 
+const HitLineOffset = 370; 
+const HitWindowAddHeight = 80;
 const HitKeys = ["d","f","j","k"];
 const NextTileAfter =   167.99999999999991;
 const FailSound = [48,52,55];
@@ -259,7 +259,7 @@ function draw() {
 
             // AutoPlay
             if (AutoPlayEnable) {
-                if (tiles[currentTile].y >= 640 && !tiles[currentTile+1].tapped) {
+                if (tiles[currentTile].y >= 600 && !tiles[currentTile+1].tapped) {
                     DecodeNote(tiles[currentTile+1].tileNote.n, false, false);
                     tiles[currentTile+1].tapped = true;
                 } 
@@ -303,7 +303,7 @@ function draw() {
         }
 
         //Red line
-        if (IsItHorizontalScreen) image(GameHitLine, width / 2 - 200, HitLineOffset + 120);
+        if (IsItHorizontalScreen) image(GameHitLine, width / 2 - 200, HitLineOffset + 105);
 
         //Info display
         if (DisplayInfo) {

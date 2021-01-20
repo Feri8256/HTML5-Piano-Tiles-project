@@ -25,7 +25,7 @@ class Tile {
                 break;
         }
 
-        const tileYoffset   =   149.99999999999991; //150
+        const tileYoffset   =   159.99999999999991;
 
         if (this.tileNote.n === 0) { //Blank tile
             image(GameTileBlank, tilePixelPos, this.y - tileYoffset,100,155);
@@ -52,9 +52,6 @@ class Tile {
                 }
             }
         }
-
-        ////////////
-        
     }
 
     animate(currentSpeed) {
