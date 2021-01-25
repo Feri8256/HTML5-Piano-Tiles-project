@@ -63,9 +63,11 @@ function touchStarted() {
     touchstart = true;
 
     //Nem engedi, hogy a hosszabb ideig rajta tartott újjak érvényesnek számítsanak
-    setTimeout(()=>{
-        touchstart = false;
-    }, 500);
+    if (touches.length >= 3) {
+        setTimeout(()=>{
+            touchstart = false;
+        }, 100);
+    }
 }
 
 function touchEnded() {
