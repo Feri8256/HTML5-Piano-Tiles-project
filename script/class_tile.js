@@ -37,6 +37,25 @@ class Tile {
             else {
                 image(GameTile, tilePixelPos, this.y - tileYoffset,100,155);
 
+                //Érintőképernyős bevitelt támogató rész
+                if (touchstart && !this.tapped) {
+                    //Ellenörzi a azokat a pontokat, ahol a képernyő érintések történtek
+                    for (var i = 0; i < touches.length; i++) {
+                        if (
+                            touches[i].x >= tilePixelPos &&
+                            touches[i].x <= tilePixelPos + 100 &&
+                            touches[i].y >= this.y - tileYoffset &&
+                            touches[i].y <= this.y - tileYoffset + 160
+                        ) {
+                            if (!FailState) {
+                                DecodeNote(this.tileNote.n,false, this.tapped);
+                                this.tapped = true;
+                            }
+                        }
+                    }
+                }
+
+                //Egér bevitelt támogató rész
                 if (
                     mouseX >= tilePixelPos &&
                     mouseX <= tilePixelPos + 100 &&

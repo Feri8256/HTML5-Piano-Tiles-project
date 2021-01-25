@@ -58,6 +58,22 @@ function keyPressed() {
     }
 }
 
+
+function touchStarted() {
+    touchstart = true;
+
+    //Nem engedi, hogy a hosszabb ideig rajta tartott újjak érvényesnek számítsanak
+    setTimeout(()=>{
+        touchstart = false;
+    }, 500);
+}
+
+function touchEnded() {
+    if(touches.length == 0) {
+        touchstart = false;
+    }
+}
+
 function mouseWheel(event) {
     if (ScreenStates.Screen_Menu) {
         if (event.delta < 0) MenuScrollY += Math.abs(event.delta) / 2; //up

@@ -64,6 +64,8 @@ let ScreenStates = {
     Screen_Loading: false
 }
 
+let touchstart = false;
+
 let MenuScrollY = 0;
 
 let BtnMenuPressedOnce = false;
