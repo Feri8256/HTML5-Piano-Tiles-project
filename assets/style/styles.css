@@ -1,4 +1,42 @@
 body {
     margin: 0;
     background-color: black;
+    min-width: 400px;
+    min-height: 600px;
+}
+
+#p5_loading img{
+    position: absolute;
+
+    width: 96px;
+
+    transform: translate(50%, 50%);
+
+    top: 30%;
+    left: 40%;
+
+    animation-name: loadingAnimation;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+
+    -webkit-animation-name: loadingAnimation;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+}
+
+@keyframes loadingAnimation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg); 
+    }
+}
+@-webkit-keyframes loadingAnimation {
+    0% { 
+        -webkit-transform: rotate(0deg);
+    }
+    100% { 
+        -webkit-transformtransform: rotate(360deg);
+    }
 }
