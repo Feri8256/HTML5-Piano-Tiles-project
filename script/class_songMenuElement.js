@@ -16,7 +16,7 @@ class SongMenuElement {
         ) {
             fill(Layouts.MenuCardHoverColor);
             if (mouseIsPressed && !this.pressedOnce) {
-                SongSelector(this.songlist_element.filename);
+                FetchSong(this.songlist_element.filename);
                 this.pressedOnce = true;
                 setTimeout(() => { this.pressedOnce = false; }, 1000);
             }
