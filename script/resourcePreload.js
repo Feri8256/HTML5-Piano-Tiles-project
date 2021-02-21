@@ -1,4 +1,7 @@
 function preload() {
+    console.log('%cStarting preload resources...',"color: yellow")
+    var PreloadBefore = performance.now();
+
     PreloadPianoSounds();
     Layouts = loadJSON('assets/style/ui.json');
     GameBg = loadImage(ImgBaseUrl + 'game-bg.png');
@@ -20,4 +23,7 @@ function preload() {
     StarBlank = loadImage(ImgBaseUrl + 'star-b.png');
     Crown = loadImage(ImgBaseUrl + 'crown.png');
     CrownBlank = loadImage(ImgBaseUrl + 'crown-b.png');
+
+    var PreloadAfter = performance.now();
+    console.log(`%cResource preload finished!\n%cProcess took ${Math.round((PreloadAfter - PreloadBefore) / 1000)} sec.`, "color: #55ff55","color: #777777")
 }

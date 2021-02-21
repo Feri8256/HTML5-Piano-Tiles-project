@@ -4,13 +4,13 @@ function keyPressed() {
     if (HitKeys.includes(key) &&
         PauseState &&
         !FailState &&
-        ScreenStates.Screen_Game
+        ScreenState === 1
     ) {
         SetSpeedAtStart();
         PauseState = false;
     }
 
-    if (ScreenStates.Screen_Game) {
+    if (ScreenState === 1) {
         let chkKey;
         if (tiles[currentTile+1].y >= HitLineOffset) chkKey = tiles[currentTile+1].tilePos;
         if (key === HitKeys[chkKey] && tiles[currentTile+1].y >= HitLineOffset) {
@@ -77,7 +77,7 @@ function touchEnded() {
 }
 
 function mouseWheel(event) {
-    if (ScreenStates.Screen_Menu) {
+    if (ScreenState === 0) {
         if (event.delta < 0) MenuScrollY += Math.abs(event.delta) / 2; //up
         if (event.delta > 0) MenuScrollY += -event.delta / 2; //down
     }

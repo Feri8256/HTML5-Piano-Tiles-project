@@ -1,5 +1,5 @@
 function FetchSong(filename) {
-    ScreenStates.Screen_Loading = true;
+    ScreenState = 2;
 
     fetch(songsBaseURL+filename)
         .then(response => response.json())

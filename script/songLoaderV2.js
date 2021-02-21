@@ -7,9 +7,9 @@ function SongLoaderV2(data) {
         Notes:[]
     };
 
-    outputData.Title = data.Title;
-    outputData.baseSpeed = data.baseSpeed;
-    outputData.speedIncrement = data.speedIncrement;
+    outputData.Title = data.Title || "Default title";
+    outputData.baseSpeed = data.baseSpeed || 10;
+    outputData.speedIncrement = data.speedIncrement || 0.5;
 
     var dNotes = data.Notes;
     for (var i = 0; i < dNotes.length; i++) {
