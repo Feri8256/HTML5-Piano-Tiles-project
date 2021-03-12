@@ -65,7 +65,6 @@ function DecodeNote(tileInput,outside,tapped) {
             else {
                 PlayNote[tileInput]();
             }
-            Score++
         }
     }
 }

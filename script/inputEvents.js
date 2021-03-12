@@ -16,9 +16,9 @@ function keyPressed() {
         if (key === HitKeys[chkKey] && tiles[currentTile+1].y >= HitLineOffset) {
             DecodeNote(tiles[currentTile+1].tileNote.n, false, tiles[currentTile+1].tapped);
             tiles[currentTile+1].tapped = true;
+            if(!AutoPlayEnable) Score++;
         }
     }
-
 
     if (key === 'r') {
         if (FailState){

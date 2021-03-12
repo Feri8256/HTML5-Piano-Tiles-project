@@ -1,4 +1,5 @@
-console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial")
+console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
+const versionText = "12-03-2021"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -87,8 +88,8 @@ let AppHeight = 0;
 let CanvasCenterPosition = 0;
 
 window.onerror = function () {
-    alert('Sorry!... A script error occurred. Press OK to reload the page.');
-    location.reload();
+    var confirmation = confirm('Sorry!... A script error occurred. Press OK to reload the page.');
+    if (confirmation) location.reload();
 }
 
 function setup() {
@@ -103,7 +104,7 @@ function setup() {
     canvas = createCanvas(400,600); //400x600
     canvas.position(window.innerWidth / 2 - 200, 0);
     frameRate(60);
-    pixelDensity(1);
+    //pixelDensity(1);
     noStroke();
     LoadMenu();
 }
@@ -192,6 +193,8 @@ function FailToMenu() {
 function draw() {
 
     switch (ScreenState) {
+
+        //Menu
         case 0:
             background(16);
             textFont(ScoreFont);
@@ -224,6 +227,7 @@ function draw() {
             }
             break;
 
+        //Game
         case 1:
             if (
                 mouseIsPressed && 
@@ -431,6 +435,7 @@ function draw() {
             }
             break;
 
+        //Loading
         case 2:
             background(16);
             textSize(40);
@@ -440,4 +445,10 @@ function draw() {
             text("Loading...", width / 2, height / 2);
             break;
     }
+
+    textFont(ScoreFont);
+    textAlign(LEFT);
+    textSize(Layouts.VersionLabelFontSize);
+    fill(Layouts.VersionLabelColor);
+    text(versionText, 2, Layouts.VersionLabelAlignY);
 }

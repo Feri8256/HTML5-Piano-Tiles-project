@@ -41,6 +41,8 @@
     "FailBtnRetryAlignY": 350,
     "FailBtnRetrySizeX": 64,
     "FailBtnRetrySizeY": 64,
+    "VersionLabelFontSize":10,
+    "VersionLabelAlignY":596,
 
     "MenuCardColor":"#303030",
     "MenuCardHoverColor":"#404040",
@@ -52,5 +54,6 @@
     "GameScoreColor":"#f04664",
     "FailTextColor":"#f0f0f0",
     "FailTextTitleColor":"#aaaaaa",
-    "FailScoreLapsColor":"#b4b4b4"
+    "FailScoreLapsColor":"#b4b4b4",
+    "VersionLabelColor":"#353535"
 }

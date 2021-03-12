@@ -50,6 +50,7 @@ class Tile {
                             if (!FailState) {
                                 DecodeNote(this.tileNote.n,false, this.tapped);
                                 this.tapped = true;
+                                if(!AutoPlayEnable) Score++;
                             }
                         }
                     }
@@ -66,6 +67,7 @@ class Tile {
                         if (!FailState) {
                             DecodeNote(this.tileNote.n,false, this.tapped);
                             this.tapped = true;
+                            if(!AutoPlayEnable) Score++;
                         }
                     }
                 }
