@@ -35,7 +35,10 @@ class Tile {
                 image(GameTileTapped, tilePixelPos, this.y - tileYoffset,100,155);
             }
             else {
-                image(GameTile, tilePixelPos, this.y - tileYoffset,100,155);
+                if (this.tileNote.n.length && this.tileNote.n[0].sn) {
+                    image(GameTileDouble, tilePixelPos, this.y - tileYoffset,100,155);
+                }
+                else { image(GameTile, tilePixelPos, this.y - tileYoffset,100,155); }
 
                 //Érintőképernyős bevitelt támogató rész
                 if (touchstart && !this.tapped) {
@@ -50,7 +53,14 @@ class Tile {
                             if (!FailState) {
                                 DecodeNote(this.tileNote.n,false, this.tapped);
                                 this.tapped = true;
-                                if(!AutoPlayEnable) Score++;
+                                if(!AutoPlayEnable){
+                                    if (this.tileNote.n.length && this.tileNote.n[0].sn) {
+                                        Score = Score + this.tileNote.n.length;
+                                    }
+                                    else {
+                                       Score++; 
+                                    }
+                                } 
                             }
                         }
                     }
@@ -67,7 +77,14 @@ class Tile {
                         if (!FailState) {
                             DecodeNote(this.tileNote.n,false, this.tapped);
                             this.tapped = true;
-                            if(!AutoPlayEnable) Score++;
+                            if(!AutoPlayEnable){
+                                if (this.tileNote.n.length && this.tileNote.n[0].sn) {
+                                    Score = Score + this.tileNote.n.length;
+                                }
+                                else {
+                                   Score++; 
+                                }
+                            } 
                         }
                     }
                 }

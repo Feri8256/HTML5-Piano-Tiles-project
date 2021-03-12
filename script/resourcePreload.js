@@ -9,6 +9,7 @@ function preload() {
     GameTile = loadImage(ImgBaseUrl + 'tile.png');
     GameTileTapped = loadImage(ImgBaseUrl + 'tile-t.png');
     GameTileBlank = loadImage(ImgBaseUrl + 'tile-b.png');
+    GameTileDouble = loadImage(ImgBaseUrl + 'tile-d.png');
     GameHitLine = loadImage(ImgBaseUrl + 'hitline.png');
     FailPanel = loadImage(ImgBaseUrl + 'fail-panel.png');
     ScoreFont = loadFont('assets/res/fonts/ocr_a_ext.ttf');

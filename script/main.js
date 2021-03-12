@@ -17,6 +17,7 @@ let GameBg;
 let GameTile;
 let GameTileTapped;
 let GameTileBlank;
+let GameTileDouble;
 let GameLines;
 let GameHitLine;
 let FailPanel;
