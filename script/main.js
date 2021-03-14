@@ -1,5 +1,5 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "12-03-2021"
+const versionText = "14-03-2021"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -47,6 +47,7 @@ let AutoPlayEnable = false;
 let FailState = false;
 let PauseState = true;
 let Lifes = 3;
+let bestScore = 0;
 
 /**Reward counter
  * 0: Nothing,
@@ -114,6 +115,20 @@ function windowResized() {
     canvas.position(window.innerWidth / 2 - 200, 0);
 }
 
+function getBestScore(id){
+    let testRead = localStorage.getItem(id);
+    let output = parseInt(testRead);
+
+    if (isNaN(output)) {
+        return 0;
+    }
+    else return output;
+}
+
+function setNewScore(id, score) {
+    localStorage.setItem(id, score.toString());
+}
+
 function ResetTiles() {
     tiles = [];
     currentTile = 0;
@@ -152,7 +167,8 @@ function RetryFromFail() {
     ResetReward();
     setTimeout(()=>{
         PauseState = true;
-        ResetTiles();    
+        ResetTiles();
+        bestScore = getBestScore(Song.id);
     },500);
 }
 
@@ -166,6 +182,7 @@ function SetFail() {
         currentSpeed = 0;
         DecodeNote(FailSound,true);
         setTimeout(()=>{FailState = true;},800);
+        if (Score > bestScore) setNewScore(Song.Title, Score);
     }
 }
 
@@ -247,11 +264,17 @@ function draw() {
                 textAlign(CENTER);
                 fill(Layouts.GameStartTextColor);
                 if (IsItHorizontalScreen) {
-                    text("Press\nD / F / J / K\nkey to start", 200, Layouts.GameStartTextAlignY);
+                    text("Press\nD / F / J / K", 200, Layouts.GameStartTextAlignY);
                 }
                 else {
                     text("Tap to start", 200, Layouts.GameStartTextAlignY);
                 }
+
+                fill(200)
+                textAlign(LEFT)
+                textSize(22)
+                text("Song: "+Song.Title, 0, 550)
+                text("Best score: "+bestScore, 0, 580)
             }
     
             if (currentTile < tiles.length) {

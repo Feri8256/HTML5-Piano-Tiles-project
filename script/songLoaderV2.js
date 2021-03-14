@@ -26,4 +26,5 @@ function SongLoaderV2(data) {
 
     //Kész
     Song = outputData;
+    bestScore = getBestScore(outputData.Title);
 }
