@@ -5,16 +5,15 @@ body {
     min-height: 600px;
 }
 
-#p5_loading img{
+#p5_loading {
     position: absolute;
-
     width: 96px;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+}
 
-    transform: translate(50%, 50%);
-
-    top: 30%;
-    left: 40%;
-
+#p5_loading img {
     animation-name: loadingAnimation;
     animation-duration: 1s;
     animation-timing-function: linear;
@@ -32,6 +31,7 @@ body {
         transform: rotate(360deg); 
     }
 }
+
 @-webkit-keyframes loadingAnimation {
     0% { 
         -webkit-transform: rotate(0deg);
