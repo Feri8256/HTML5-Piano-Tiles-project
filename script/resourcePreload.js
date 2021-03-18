@@ -5,6 +5,7 @@ function preload() {
     PreloadPianoSounds();
     Layouts = loadJSON('assets/style/ui.json');
     GameBg = loadImage(ImgBaseUrl + 'game-bg.png');
+    GameEndBg = loadImage(ImgBaseUrl + 'gameend-bg.png');
     GameLines = loadImage(ImgBaseUrl + 'lines.png');
     GameTile = loadImage(ImgBaseUrl + 'tile.png');
     GameTileTapped = loadImage(ImgBaseUrl + 'tile-t.png');

@@ -14,6 +14,7 @@ let Layouts;
 //image res
 let BackImg;
 let GameBg;
+let GameEndBg;
 let GameTile;
 let GameTileTapped;
 let GameTileBlank;
@@ -48,6 +49,7 @@ let FailState = false;
 let PauseState = true;
 let Lifes = 3;
 let bestScore = 0;
+let newBest = false;
 
 /**Reward counter
  * 0: Nothing,
@@ -164,11 +166,16 @@ function RepeatSong() {
 }
 
 function RetryFromFail() {
-    ResetReward();
+    if (Score > bestScore) {
+        setNewScore(Song.Title, Score);
+    } 
     setTimeout(()=>{
         PauseState = true;
+        ScreenState = 1;
         ResetTiles();
-        bestScore = getBestScore(Song.id);
+        ResetReward();
+        bestScore = getBestScore(Song.Title);
+        newBest = false;
     },500);
 }
 
@@ -181,8 +188,11 @@ function SetFail() {
     if (FailState === false && ScreenState === 1) {
         currentSpeed = 0;
         DecodeNote(FailSound,true);
-        setTimeout(()=>{FailState = true;},800);
-        if (Score > bestScore) setNewScore(Song.Title, Score);
+        setTimeout(()=>{FailState = true; ScreenState = 3;},1300);
+        if (Score > bestScore) {
+            newBest = true;
+            setNewScore(Song.Title, Score);
+        } 
     }
 }
 
@@ -196,15 +206,17 @@ function MenuToGame() {
 function FailToMenu() {
     FailState = false;
     setTimeout(()=>{
+        Song = null;
+        currentTile = 0;
+        completedLap = 0;
+        ResetReward();
+        Lifes = 3;
+        Score = 0;
+        tiles = [];
         ScreenState = 0;
+        newBest = false;
     },300);
-    Song = null;
-    currentTile = 0;
-    completedLap = 0;
-    ResetReward();
-    Lifes = 3;
-    Score = 0;
-    tiles = [];
+    
 }
 
 //Main draw loop
@@ -223,20 +235,20 @@ function draw() {
             }
     
             if (!IsItHorizontalScreen) {
-                image(BtnArrowUp, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY);
+                image(BtnArrowUp, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY, Layouts.MenuArrowUpSizeX, Layouts.MenuArrowUpSizeY);
                 if (
                     mouseX > Layouts.MenuArrowUpAlignX &&
-                    mouseX < 400 &&
+                    mouseX < Layouts.MenuArrowUpSizeX + Layouts.MenuArrowUpAlignX &&
                     mouseY > Layouts.MenuArrowUpAlignY &&
                     mouseY < Layouts.MenuArrowUpSizeY + Layouts.MenuArrowUpAlignY
                 ) {
                     if (mouseIsPressed) MenuScrollY += 20;
                 }
     
-                image(BtnArrowDown, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY);
+                image(BtnArrowDown, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY, Layouts.MenuArrowDownSizeX, Layouts.MenuArrowDownSizeY);
                 if (
                     mouseX > Layouts.MenuArrowDownAlignX &&
-                    mouseX < 400 &&
+                    mouseX < Layouts.MenuArrowDownSizeX + Layouts.MenuArrowDownAlignX &&
                     mouseY > Layouts.MenuArrowDownAlignY &&
                     mouseY < Layouts.MenuArrowDownSizeY + Layouts.MenuArrowDownAlignY
                 ) {
@@ -342,39 +354,39 @@ function draw() {
     
             //Reward display
             if (RewardCount === 0) {
-                image(StarBlank, Layouts.GameReward1AlignX, 0, 36,36);
-                image(StarBlank, Layouts.GameReward2AlignX, 0, 36,36);
-                image(StarBlank, Layouts.GameReward3AlignX, 0, 36,36);
+                image(StarBlank, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(StarBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
             }
             else if (RewardCount === 1) {
-                image(Star, Layouts.GameReward1AlignX, 0, 36,36);
-                image(StarBlank, Layouts.GameReward2AlignX, 0, 36,36);
-                image(StarBlank, Layouts.GameReward3AlignX, 0, 36,36);
+                image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(StarBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
             }
             else if (RewardCount === 2) {
-                image(Star, Layouts.GameReward1AlignX, 0, 36,36);
-                image(Star, Layouts.GameReward2AlignX, 0, 36,36);
-                image(StarBlank, Layouts.GameReward3AlignX, 0, 36,36);
+                image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(Star, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
             }
             else if (RewardCount === 3) {
-                image(Star, Layouts.GameReward1AlignX, 0, 36,36);
-                image(Star, Layouts.GameReward2AlignX, 0, 36,36);
-                image(Star, Layouts.GameReward3AlignX, 0, 36,36);
+                image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(Star, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(Star, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
             }
             else if (RewardCount === 4) {
-                image(Crown, Layouts.GameReward1AlignX, 0, 36,36);
-                image(CrownBlank, Layouts.GameReward2AlignX, 0, 36,36);
-                image(CrownBlank, Layouts.GameReward3AlignX, 0, 36,36);
+                image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(CrownBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(CrownBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
             }
             else if (RewardCount === 5) {
-                image(Crown, Layouts.GameReward1AlignX, 0, 36,36);
-                image(Crown, Layouts.GameReward2AlignX, 0, 36,36);
-                image(CrownBlank, Layouts.GameReward3AlignX, 0, 36,36);
+                image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(Crown, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(CrownBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
             }
             else if (RewardCount >= 6) {
-                image(Crown, Layouts.GameReward1AlignX, 0, 36,36);
-                image(Crown, Layouts.GameReward2AlignX, 0, 36,36);
-                image(Crown, Layouts.GameReward3AlignX, 0, 36,36);
+                image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(Crown, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                image(Crown, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
             }
     
             //Life display
@@ -405,58 +417,6 @@ function draw() {
             textFont(ScoreFont);
             fill(Layouts.GameScoreColor);
             if (Song) text(Score, width / 2, Layouts.GameScoreMarginTop);
-    
-            //Fail popup
-            if(FailState) {
-                image(FailPanel, 0, height / 2 - 150, 400, 300)
-                textSize(Layouts.FailTextFontSize);
-                textAlign(CENTER);
-                textFont(ScoreFont);
-                fill(Layouts.FailTextColor);
-                text("You failed!", 200, Layouts.FailTextAlignY);
-    
-                textSize(Layouts.FailTextTitleFontSize);
-                textFont(ScoreFont);
-                fill(Layouts.FailTextTitleColor);
-                text(Song.Title, 200, Layouts.FailTextTitleAlignY);
-    
-                textSize(Layouts.FailScoreLapsFontSize);
-                textAlign(CENTER);
-                textFont(ScoreFont);
-                fill(Layouts.FailScoreLapsColor);
-                text(`Score: ${Score}`, Layouts.FailScoreAlignX, height / 2);
-                text(`Laps: ${completedLap}`, Layouts.FailLapsAlignX, height / 2);
-    
-                //Menu button and click
-                image(BtnMenu, Layouts.FailBtnMenuAlignX, Layouts.FailBtnMenuAlignY);
-                if (
-                    mouseX > Layouts.FailBtnMenuAlignX &&
-                    mouseX < Layouts.FailBtnMenuAlignX + Layouts.FailBtnMenuSizeX &&
-                    mouseY > Layouts.FailBtnMenuAlignY &&
-                    mouseY < Layouts.FailBtnMenuAlignY + Layouts.FailBtnMenuSizeY
-                ) {
-                    if (mouseIsPressed && !BtnMenuPressedOnce) {
-                        FailToMenu();
-                        BtnMenuPressedOnce = true;
-                        setTimeout(()=>{ BtnMenuPressedOnce = false },500);
-                    }
-                }
-    
-                //Retry button and click
-                image(BtnRetry, 218, height - 250);
-                if (
-                    mouseX > Layouts.FailBtnRetryAlignX &&
-                    mouseX < Layouts.FailBtnRetryAlignX + Layouts.FailBtnRetrySizeX &&
-                    mouseY > Layouts.FailBtnRetryAlignY &&
-                    mouseY < Layouts.FailBtnRetryAlignY + Layouts.FailBtnRetrySizeY
-                ) {
-                    if (mouseIsPressed && !BtnRetryPressedOnce) {
-                        RetryFromFail();
-                        BtnRetryPressedOnce = true;
-                        setTimeout(()=>{ BtnRetryPressedOnce = false },500);
-                    }
-                }
-            }
             break;
 
         //Loading
@@ -467,6 +427,95 @@ function draw() {
             textFont(ScoreFont);
             fill(240, 240, 240);
             text("Loading...", width / 2, height / 2);
+            break;
+
+        //Game results screen
+        case 3:
+            image(GameEndBg, 0, 0, 400, 600);
+
+            textSize(Layouts.FailTextFontSize);
+            textAlign(CENTER);
+            textFont(ScoreFont);
+            fill(Layouts.FailTextColor);
+    
+            textSize(Layouts.FailTextTitleFontSize);
+            textFont(ScoreFont);
+            fill(Layouts.FailTextTitleColor);
+            text(Song.Title, width / 2, Layouts.FailTextTitleAlignY);
+    
+            textSize(Layouts.FailScoreFontSize);
+            textAlign(CENTER);
+            textFont(ScoreFont);
+            fill(Layouts.FailScoreLapsColor);
+            text(Score, width / 2, Layouts.FailScoreAlignY);
+
+
+            if (newBest) {
+                textSize(Layouts.FailNewBestFontSize);
+                text("New best", width / 2, Layouts.FailNewBestAlignY);
+            }
+
+            //Reward display on the results screen
+            if (RewardCount === 1) {
+                image(Star, Layouts.FailReward1AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(StarBlank, Layouts.FailReward2AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(StarBlank, Layouts.FailReward3AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+            }
+            else if (RewardCount === 2) {
+                image(Star, Layouts.FailReward1AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(Star, Layouts.FailReward2AlignX, Layouts.FailRewardAlignY0, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(StarBlank, Layouts.FailReward3AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+            }
+            else if (RewardCount === 3) {
+                image(Star, Layouts.FailReward1AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(Star, Layouts.FailReward2AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(Star, Layouts.FailReward3AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+            }
+            else if (RewardCount === 4) {
+                image(Crown, Layouts.FailReward1AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(CrownBlank, Layouts.FailReward2AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(CrownBlank, Layouts.FailReward3AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+            }
+            else if (RewardCount === 5) {
+                image(Crown, Layouts.FailReward1AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(Crown, Layouts.FailReward2AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(CrownBlank, Layouts.FailReward3AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+            }
+            else if (RewardCount >= 6) {
+                image(Crown, Layouts.FailReward1AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(Crown, Layouts.FailReward2AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(Crown, Layouts.FailReward3AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+            }
+    
+            //Menu button and click
+            image(BtnMenu, Layouts.FailBtnMenuAlignX, Layouts.FailBtnMenuAlignY, Layouts.FailBtnMenuSizeX, Layouts.FailBtnMenuSizeY);
+            if (
+                mouseX > Layouts.FailBtnMenuAlignX &&
+                mouseX < Layouts.FailBtnMenuAlignX + Layouts.FailBtnMenuSizeX &&
+                mouseY > Layouts.FailBtnMenuAlignY &&
+                mouseY < Layouts.FailBtnMenuAlignY + Layouts.FailBtnMenuSizeY
+            ) {
+                if (mouseIsPressed && !BtnMenuPressedOnce) {
+                    FailToMenu();
+                    BtnMenuPressedOnce = true;
+                    setTimeout(()=>{ BtnMenuPressedOnce = false },500);
+                }
+            }
+    
+            //Retry button and click
+            image(BtnRetry, Layouts.FailBtnRetryAlignX, Layouts.FailBtnRetryAlignY, Layouts.FailBtnRetrySizeX, Layouts.FailBtnRetrySizeY);
+            if (
+                mouseX > Layouts.FailBtnRetryAlignX &&
+                mouseX < Layouts.FailBtnRetryAlignX + Layouts.FailBtnRetrySizeX &&
+                mouseY > Layouts.FailBtnRetryAlignY &&
+                mouseY < Layouts.FailBtnRetryAlignY + Layouts.FailBtnRetrySizeY
+            ) {
+                if (mouseIsPressed && !BtnRetryPressedOnce) {
+                    RetryFromFail();
+                    BtnRetryPressedOnce = true;
+                    setTimeout(()=>{ BtnRetryPressedOnce = false },500);
+                }
+            }
             break;
     }
 
