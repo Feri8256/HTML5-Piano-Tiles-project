@@ -61,6 +61,7 @@
     "MenuCardNumberColor":"#242424",
     "GameStartTextColor":"#d2aa64",
     "GameScoreColor":"#f04664",
+    "GameTimeProgressBarColor":"#89ccff",
     "FailTextColor":"#f0f0f0",
     "FailTextTitleColor":"#aaaaaa",
     "FailScoreLapsColor":"#b4b4b4",

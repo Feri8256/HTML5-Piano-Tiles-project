@@ -417,6 +417,11 @@ function draw() {
             textFont(ScoreFont);
             fill(Layouts.GameScoreColor);
             if (Song) text(Score, width / 2, Layouts.GameScoreMarginTop);
+
+            //Time progress bar
+            let lineWidth = map(currentTile, 0, tilesLength-5, 0, width);
+            fill(Layouts.GameTimeProgressBarColor)
+            rect(0,0, lineWidth,3)
             break;
 
         //Loading
