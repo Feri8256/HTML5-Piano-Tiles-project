@@ -1,5 +1,5 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "14-03-2021"
+const versionText = "28032021"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -468,7 +468,7 @@ function draw() {
             }
             else if (RewardCount === 2) {
                 image(Star, Layouts.FailReward1AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
-                image(Star, Layouts.FailReward2AlignX, Layouts.FailRewardAlignY0, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
+                image(Star, Layouts.FailReward2AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
                 image(StarBlank, Layouts.FailReward3AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
             }
             else if (RewardCount === 3) {
