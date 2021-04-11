@@ -1,5 +1,5 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "28032021"
+const versionText = "20210411"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -73,10 +73,12 @@ let ScreenState = 0;
 
 let touchstart = false;
 
-let MenuScrollY = 0;
+let MenuPageNumber = 0;
 
 let BtnMenuPressedOnce = false;
 let BtnRetryPressedOnce = false;
+let BtnArrowUpPressedOnce = false;
+let BtnArrowDownPressedOnce = false;
 
 let MenuElementsYPosition = 0;
 let SongListElements = [];
@@ -228,31 +230,43 @@ function draw() {
         case 0:
             background(16);
             textFont(ScoreFont);
-            for (var i = 0; i < SongListElements.length; i++) {
-                SongListElements[i].show(MenuElementsYPosition,MenuScrollY);
+            for (var i = MenuPageNumber; i < MenuPageNumber+5; i++) {
+                SongListElements[i]?.show(MenuElementsYPosition);
                 MenuElementsYPosition += Layouts.MenuCardHeight + 20;
-                if (MenuElementsYPosition === 120 * SongListElements.length) MenuElementsYPosition = 0;
+                if (MenuElementsYPosition === 120 * 5) MenuElementsYPosition = 0;
             }
     
             if (!IsItHorizontalScreen) {
-                image(BtnArrowUp, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY, Layouts.MenuArrowUpSizeX, Layouts.MenuArrowUpSizeY);
-                if (
-                    mouseX > Layouts.MenuArrowUpAlignX &&
-                    mouseX < Layouts.MenuArrowUpSizeX + Layouts.MenuArrowUpAlignX &&
-                    mouseY > Layouts.MenuArrowUpAlignY &&
-                    mouseY < Layouts.MenuArrowUpSizeY + Layouts.MenuArrowUpAlignY
-                ) {
-                    if (mouseIsPressed) MenuScrollY += 20;
+                if (MenuPageNumber != 0) {
+                    image(BtnArrowUp, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY, Layouts.MenuArrowUpSizeX, Layouts.MenuArrowUpSizeY);
+                    if (
+                        mouseX > Layouts.MenuArrowUpAlignX &&
+                        mouseX < Layouts.MenuArrowUpSizeX + Layouts.MenuArrowUpAlignX &&
+                        mouseY > Layouts.MenuArrowUpAlignY &&
+                        mouseY < Layouts.MenuArrowUpSizeY + Layouts.MenuArrowUpAlignY
+                    ) {
+                        if (mouseIsPressed && !BtnArrowUpPressedOnce) {
+                            BtnArrowUpPressedOnce = true
+                            MenuPageNumber--;
+                            setTimeout(()=>{BtnArrowUpPressedOnce = false},100)
+                        } 
+                    }
                 }
-    
-                image(BtnArrowDown, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY, Layouts.MenuArrowDownSizeX, Layouts.MenuArrowDownSizeY);
-                if (
-                    mouseX > Layouts.MenuArrowDownAlignX &&
-                    mouseX < Layouts.MenuArrowDownSizeX + Layouts.MenuArrowDownAlignX &&
-                    mouseY > Layouts.MenuArrowDownAlignY &&
-                    mouseY < Layouts.MenuArrowDownSizeY + Layouts.MenuArrowDownAlignY
-                ) {
-                    if (mouseIsPressed) MenuScrollY -= 20;
+                
+                if (MenuPageNumber < SongListElements.length - 4) {
+                    image(BtnArrowDown, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY, Layouts.MenuArrowDownSizeX, Layouts.MenuArrowDownSizeY);
+                    if (
+                        mouseX > Layouts.MenuArrowDownAlignX &&
+                        mouseX < Layouts.MenuArrowDownSizeX + Layouts.MenuArrowDownAlignX &&
+                        mouseY > Layouts.MenuArrowDownAlignY &&
+                        mouseY < Layouts.MenuArrowDownSizeY + Layouts.MenuArrowDownAlignY
+                    ) {
+                        if (mouseIsPressed && !BtnArrowDownPressedOnce) {
+                            BtnArrowDownPressedOnce = true
+                            MenuPageNumber++;
+                            setTimeout(()=>{BtnArrowDownPressedOnce = false},100)
+                        } 
+                    }
                 }
             }
             break;

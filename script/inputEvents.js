@@ -85,8 +85,8 @@ function touchEnded() {
 
 function mouseWheel(event) {
     if (ScreenState === 0) {
-        if (event.delta < 0) MenuScrollY += Math.abs(event.delta) / 2; //up
-        if (event.delta > 0) MenuScrollY += -event.delta / 2; //down
+        if (event.delta < 0 && MenuPageNumber != 0) MenuPageNumber--; //up
+        if (event.delta > 0 && MenuPageNumber < SongListElements.length - 4) MenuPageNumber++; //down
     }
     return false;
 }

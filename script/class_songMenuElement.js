@@ -5,14 +5,14 @@ class SongMenuElement {
         this.indexNumber = indexNumber;
     }
 
-    show(MenuElementsYPosition, MenuScrollY) {
+    show(MenuElementsYPosition) {
         push()
 
         if (
             mouseX > 0 &&
             mouseX < Layouts.MenuCardWidth &&
-            mouseY > MenuElementsYPosition + MenuScrollY &&
-            mouseY < MenuElementsYPosition + MenuScrollY + Layouts.MenuCardHeight
+            mouseY > MenuElementsYPosition &&
+            mouseY < MenuElementsYPosition + Layouts.MenuCardHeight
         ) {
             fill(Layouts.MenuCardHoverColor);
             if (mouseIsPressed && !this.pressedOnce) {
@@ -25,22 +25,22 @@ class SongMenuElement {
         else {
             fill(Layouts.MenuCardColor)
         }
-        rect(Layouts.MenuCardLeftMargin, MenuElementsYPosition + MenuScrollY, Layouts.MenuCardWidth, Layouts.MenuCardHeight);
+        rect(Layouts.MenuCardLeftMargin, MenuElementsYPosition, Layouts.MenuCardWidth, Layouts.MenuCardHeight);
 
         fill(Layouts.MenuCardNumberColor);
         textSize(Layouts.MenuCardNumberFontSize)
         textAlign(CENTER);
-        text(this.indexNumber, Layouts.MenuCardNumberAlignX, MenuElementsYPosition + 65 + MenuScrollY);
+        text(this.indexNumber, Layouts.MenuCardNumberAlignX, MenuElementsYPosition + 65);
 
         fill(Layouts.MenuCardTitleColor);
         textSize(Layouts.MenuCardTitleFontSize);
         textAlign(LEFT);
-        text(this.songlist_element.name, Layouts.MenuCardTitleAlignX, MenuElementsYPosition + 30 + MenuScrollY);
+        text(this.songlist_element.name, Layouts.MenuCardTitleAlignX, MenuElementsYPosition + 30);
 
         fill(Layouts.MenuCardArtistColor);
         textSize(Layouts.MenuCardArtistFontSize);
         textAlign(LEFT);
-        text(this.songlist_element.performer, Layouts.MenuCardArtistAlignX, MenuElementsYPosition + 80 + MenuScrollY);
+        text(this.songlist_element.performer, Layouts.MenuCardArtistAlignX, MenuElementsYPosition + 80);
 
         pop()
     }
