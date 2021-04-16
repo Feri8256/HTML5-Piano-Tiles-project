@@ -1,5 +1,5 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "20210411"
+const versionText = "20210416"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -9,7 +9,24 @@ const HitKeys = ["d","f","j","k"];
 const NextTileAfter =   167.99999999999991;
 const FailSound = [48,52,55];
 
+/**
+ * Contains properties of ui elements
+ * "resourcePreload.js" fills this with the contents of "ui.json"
+ */
 let Layouts;
+
+/**
+ * Default game variables, configurable by the user
+ */
+let Options = {
+    DisplayScore: true,
+    DisplayInfo: false,
+    DisplayLifes: true,
+    DisplayRewards: true,
+    DisplayTimeProgress: false,
+    PlayFailSound: true,
+    HighQuality: true,
+}
 
 //image res
 let BackImg;
@@ -33,6 +50,10 @@ let BtnMenu;
 let BtnRetry;
 let BtnArrowUp;
 let BtnArrowDown;
+let UICheckBoxBase;
+let UICheckboxMark;
+let BtnSettings;
+let BtnBack;
 
 //Game variables
 let Song;
@@ -50,6 +71,21 @@ let PauseState = true;
 let Lifes = 3;
 let bestScore = 0;
 let newBest = false;
+
+//Buttons, ect.
+let CheckBoxScore;
+let CheckBoxLifes;
+let CheckBoxRewards;
+let CheckBoxTimeProgressBar;
+let CheckBoxFailSound;
+let CheckBoxDisplayInfo;
+let CheckBoxHighQuality;
+let RetryButton;
+let MenuButton;
+let MenuArrowDownButton;
+let MenuArrowUpButton;
+let SettingsButton;
+let SettingsBackButton;
 
 /**Reward counter
  * 0: Nothing,
@@ -75,11 +111,6 @@ let touchstart = false;
 
 let MenuPageNumber = 0;
 
-let BtnMenuPressedOnce = false;
-let BtnRetryPressedOnce = false;
-let BtnArrowUpPressedOnce = false;
-let BtnArrowDownPressedOnce = false;
-
 let MenuElementsYPosition = 0;
 let SongListElements = [];
 let LoadMenu;
@@ -102,6 +133,21 @@ function setup() {
     AppWidth = window.innerWidth;
     AppHeight = window.innerHeight;
 
+    CheckBoxScore = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 15, 40, 40, Options.DisplayScore, function(r){Options.DisplayScore = r}, 250);
+    CheckBoxLifes = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 75, 40, 40, Options.DisplayLifes, function(r){Options.DisplayLifes = r}, 250);
+    CheckBoxRewards = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 135, 40, 40, Options.DisplayRewards, function(r){Options.DisplayRewards = r}, 250);
+    CheckBoxTimeProgressBar = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 195, 40, 40, Options.DisplayTimeProgress, function(r){Options.DisplayTimeProgress = r}, 250);
+    CheckBoxFailSound = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 255, 40, 40, Options.PlayFailSound, function(r){Options.PlayFailSound = r}, 250);
+    CheckBoxDisplayInfo = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 315, 40, 40, Options.DisplayInfo, function(r){Options.DisplayInfo = r}, 250);
+    CheckBoxHighQuality = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 375, 40, 40, Options.HighQuality, function(r){Options.HighQuality = r}, 250);
+
+    MenuArrowDownButton = new uiIconButton(BtnArrowDown, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY, Layouts.MenuArrowDownSizeX, Layouts.MenuArrowDownSizeY, function(){MenuPageNumber++}, 100);
+    MenuArrowUpButton = new uiIconButton(BtnArrowUp, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY, Layouts.MenuArrowUpSizeX, Layouts.MenuArrowUpSizeY, function(){MenuPageNumber--}, 100);
+    MenuButton = new uiIconButton(BtnMenu, Layouts.FailBtnMenuAlignX, Layouts.FailBtnMenuAlignY, Layouts.FailBtnMenuSizeX, Layouts.FailBtnMenuSizeY, FailToMenu, 250);
+    RetryButton = new uiIconButton(BtnRetry, Layouts.FailBtnRetryAlignX, Layouts.FailBtnRetryAlignY, Layouts.FailBtnRetrySizeX, Layouts.FailBtnRetrySizeY, RetryFromFail, 250);
+    SettingsButton = new uiIconButton(BtnSettings, Layouts.SettingsBtnAlignX, Layouts.SettingsBtnAlignY, Layouts.SettingsBtnSizeX, Layouts.SettingsBtnSizeY, MenuToSettings, 250);
+    SettingsBackButton = new uiIconButton(BtnBack, Layouts.SettingsBackAlignX, Layouts.SettingsBackAlignY, Layouts.SettingsBackSizeX, Layouts.SettingsBackSizeY, SettingsToMenu, 250);
+
     //Is it desktop screen?
     if (AppWidth > AppHeight) IsItHorizontalScreen = true;
 
@@ -110,9 +156,10 @@ function setup() {
     canvas = createCanvas(400,600); //400x600
     canvas.position(window.innerWidth / 2 - 200, 0);
     frameRate(60);
-    //pixelDensity(1);
+    if (!Options.HighQuality) pixelDensity(1);
     noStroke();
     LoadMenu();
+
 }
 
 function windowResized() {
@@ -189,7 +236,7 @@ function ReduceLife() {
 function SetFail() {
     if (FailState === false && ScreenState === 1) {
         currentSpeed = 0;
-        DecodeNote(FailSound,true);
+        if (Options.PlayFailSound) DecodeNote(FailSound,true);
         setTimeout(()=>{FailState = true; ScreenState = 3;},1300);
         if (Score > bestScore) {
             newBest = true;
@@ -218,7 +265,19 @@ function FailToMenu() {
         ScreenState = 0;
         newBest = false;
     },300);
-    
+}
+
+function MenuToSettings() {
+    setTimeout(()=>{
+        ScreenState = 4;
+    },300)
+}
+
+function SettingsToMenu() {
+    localStorage.setItem("userOptions", JSON.stringify(Options))
+    setTimeout(()=>{
+        ScreenState = 0;
+    },300)
 }
 
 //Main draw loop
@@ -238,37 +297,16 @@ function draw() {
     
             if (!IsItHorizontalScreen) {
                 if (MenuPageNumber != 0) {
-                    image(BtnArrowUp, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY, Layouts.MenuArrowUpSizeX, Layouts.MenuArrowUpSizeY);
-                    if (
-                        mouseX > Layouts.MenuArrowUpAlignX &&
-                        mouseX < Layouts.MenuArrowUpSizeX + Layouts.MenuArrowUpAlignX &&
-                        mouseY > Layouts.MenuArrowUpAlignY &&
-                        mouseY < Layouts.MenuArrowUpSizeY + Layouts.MenuArrowUpAlignY
-                    ) {
-                        if (mouseIsPressed && !BtnArrowUpPressedOnce) {
-                            BtnArrowUpPressedOnce = true
-                            MenuPageNumber--;
-                            setTimeout(()=>{BtnArrowUpPressedOnce = false},100)
-                        } 
-                    }
+                    MenuArrowUpButton.draw();
                 }
                 
                 if (MenuPageNumber < SongListElements.length - 4) {
-                    image(BtnArrowDown, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY, Layouts.MenuArrowDownSizeX, Layouts.MenuArrowDownSizeY);
-                    if (
-                        mouseX > Layouts.MenuArrowDownAlignX &&
-                        mouseX < Layouts.MenuArrowDownSizeX + Layouts.MenuArrowDownAlignX &&
-                        mouseY > Layouts.MenuArrowDownAlignY &&
-                        mouseY < Layouts.MenuArrowDownSizeY + Layouts.MenuArrowDownAlignY
-                    ) {
-                        if (mouseIsPressed && !BtnArrowDownPressedOnce) {
-                            BtnArrowDownPressedOnce = true
-                            MenuPageNumber++;
-                            setTimeout(()=>{BtnArrowDownPressedOnce = false},100)
-                        } 
-                    }
+                    MenuArrowDownButton.draw();
                 }
             }
+
+            SettingsButton.draw()
+
             break;
 
         //Game
@@ -357,7 +395,7 @@ function draw() {
             if (IsItHorizontalScreen) image(GameHitLine, width / 2 - 200, HitLineOffset + 105);
     
             //Info display
-            if (DisplayInfo) {
+            if (Options.DisplayInfo) {
                 textSize(15);
                 textAlign(LEFT);
                 fill(210, 170, 100);
@@ -367,75 +405,84 @@ function draw() {
             }
     
             //Reward display
-            if (RewardCount === 0) {
-                image(StarBlank, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(StarBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+            if (Options.DisplayRewards) {
+                if (RewardCount === 0) {
+                    image(StarBlank, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(StarBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                }
+                else if (RewardCount === 1) {
+                    image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(StarBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                }
+                else if (RewardCount === 2) {
+                    image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(Star, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                }
+                else if (RewardCount === 3) {
+                    image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(Star, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(Star, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                }
+                else if (RewardCount === 4) {
+                    image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(CrownBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(CrownBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                }
+                else if (RewardCount === 5) {
+                    image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(Crown, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(CrownBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                }
+                else if (RewardCount >= 6) {
+                    image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(Crown, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                    image(Crown, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
+                }
             }
-            else if (RewardCount === 1) {
-                image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(StarBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-            }
-            else if (RewardCount === 2) {
-                image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(Star, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(StarBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-            }
-            else if (RewardCount === 3) {
-                image(Star, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(Star, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(Star, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-            }
-            else if (RewardCount === 4) {
-                image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(CrownBlank, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(CrownBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-            }
-            else if (RewardCount === 5) {
-                image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(Crown, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(CrownBlank, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-            }
-            else if (RewardCount >= 6) {
-                image(Crown, Layouts.GameReward1AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(Crown, Layouts.GameReward2AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-                image(Crown, Layouts.GameReward3AlignX, 0, Layouts.GameRewardSizeX,Layouts.GameRewardSizeY);
-            }
-    
+            
             //Life display
-            if (Lifes === 3) {
-                image(Life, Layouts.GameLife3AlignX, 0, 36,36);
-                image(Life, Layouts.GameLife2AlignX, 0, 36,36);
-                image(Life, Layouts.GameLife1AlignX, 0, 36,36);
+            if (Options.DisplayLifes) {
+                if (Lifes === 3) {
+                    image(Life, Layouts.GameLife3AlignX, 0, 36,36);
+                    image(Life, Layouts.GameLife2AlignX, 0, 36,36);
+                    image(Life, Layouts.GameLife1AlignX, 0, 36,36);
+                }
+                else if (Lifes === 2) {
+                    image(Life, Layouts.GameLife3AlignX, 0, 36,36);
+                    image(Life, Layouts.GameLife2AlignX, 0, 36,36);
+                    image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
+                }
+                else if(Lifes === 1) {
+                    image(Life, Layouts.GameLife3AlignX, 0, 36,36);
+                    image(LifeBlank, Layouts.GameLife2AlignX, 0, 36,36);
+                    image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
+                }
+                else if(Lifes === 0) {
+                    image(LifeBlank, Layouts.GameLife3AlignX, 0, 36,36);
+                    image(LifeBlank, Layouts.GameLife2AlignX, 0, 36,36);
+                    image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
+                }
             }
-            else if (Lifes === 2) {
-                image(Life, Layouts.GameLife3AlignX, 0, 36,36);
-                image(Life, Layouts.GameLife2AlignX, 0, 36,36);
-                image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
-            }
-            else if(Lifes === 1) {
-                image(Life, Layouts.GameLife3AlignX, 0, 36,36);
-                image(LifeBlank, Layouts.GameLife2AlignX, 0, 36,36);
-                image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
-            }
-            else if(Lifes === 0) {
-                image(LifeBlank, Layouts.GameLife3AlignX, 0, 36,36);
-                image(LifeBlank, Layouts.GameLife2AlignX, 0, 36,36);
-                image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
-            }
-    
+            
             //Score display
-            textSize(Layouts.GameScoreFontSize);
-            textAlign(CENTER);
-            textFont(ScoreFont);
-            fill(Layouts.GameScoreColor);
-            if (Song) text(Score, width / 2, Layouts.GameScoreMarginTop);
-
+            if (Options.DisplayScore) {
+                textSize(Layouts.GameScoreFontSize);
+                textAlign(CENTER);
+                textFont(ScoreFont);
+                fill(Layouts.GameScoreColor);
+                if (Song) text(Score, width / 2, Layouts.GameScoreMarginTop);
+            }
+           
             //Time progress bar
-            let lineWidth = map(currentTile, 0, tilesLength-5, 0, width);
-            fill(Layouts.GameTimeProgressBarColor)
-            rect(0,0, lineWidth,3)
+            if (Options.DisplayTimeProgress) {
+                let lineWidth = map(currentTile, 0, tilesLength-5, 0, width);
+                fill(Layouts.GameTimeProgressBarColor)
+                rect(0,0, lineWidth,3)
+            }
+           
             break;
 
         //Loading
@@ -506,35 +553,41 @@ function draw() {
                 image(Crown, Layouts.FailReward3AlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY);
             }
     
-            //Menu button and click
-            image(BtnMenu, Layouts.FailBtnMenuAlignX, Layouts.FailBtnMenuAlignY, Layouts.FailBtnMenuSizeX, Layouts.FailBtnMenuSizeY);
-            if (
-                mouseX > Layouts.FailBtnMenuAlignX &&
-                mouseX < Layouts.FailBtnMenuAlignX + Layouts.FailBtnMenuSizeX &&
-                mouseY > Layouts.FailBtnMenuAlignY &&
-                mouseY < Layouts.FailBtnMenuAlignY + Layouts.FailBtnMenuSizeY
-            ) {
-                if (mouseIsPressed && !BtnMenuPressedOnce) {
-                    FailToMenu();
-                    BtnMenuPressedOnce = true;
-                    setTimeout(()=>{ BtnMenuPressedOnce = false },500);
-                }
-            }
+            //Menu button
+            MenuButton.draw();
     
-            //Retry button and click
-            image(BtnRetry, Layouts.FailBtnRetryAlignX, Layouts.FailBtnRetryAlignY, Layouts.FailBtnRetrySizeX, Layouts.FailBtnRetrySizeY);
-            if (
-                mouseX > Layouts.FailBtnRetryAlignX &&
-                mouseX < Layouts.FailBtnRetryAlignX + Layouts.FailBtnRetrySizeX &&
-                mouseY > Layouts.FailBtnRetryAlignY &&
-                mouseY < Layouts.FailBtnRetryAlignY + Layouts.FailBtnRetrySizeY
-            ) {
-                if (mouseIsPressed && !BtnRetryPressedOnce) {
-                    RetryFromFail();
-                    BtnRetryPressedOnce = true;
-                    setTimeout(()=>{ BtnRetryPressedOnce = false },500);
-                }
-            }
+            //Retry button
+            RetryButton.draw();
+            break;
+
+        //Settings
+        case 4:
+            background(16)
+            
+            textSize(Layouts.SettingsOptionFontSize)
+            fill(160)
+            text('Display score', 20, 40)
+            CheckBoxScore.draw()
+
+            text('Display lifes', 20, 100)
+            CheckBoxLifes.draw()
+
+            text('Display rewards', 20, 160)
+            CheckBoxRewards.draw()
+
+            text('Display time progress', 20, 220)
+            CheckBoxTimeProgressBar.draw()
+
+            text('Play fail sound', 20, 280)
+            CheckBoxFailSound.draw()
+
+            text('Display info', 20, 340)
+            CheckBoxDisplayInfo.draw()
+
+            text('High quality (reload)', 20, 400)
+            CheckBoxHighQuality.draw()
+
+            SettingsBackButton.draw()
             break;
     }
 

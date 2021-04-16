@@ -25,6 +25,16 @@ function preload() {
     StarBlank = loadImage(ImgBaseUrl + 'star-b.png');
     Crown = loadImage(ImgBaseUrl + 'crown.png');
     CrownBlank = loadImage(ImgBaseUrl + 'crown-b.png');
+    UICheckBoxBase = loadImage(ImgBaseUrl + 'checkbox.png');
+    UICheckboxMark = loadImage(ImgBaseUrl + 'checkbox-mark.png');
+    BtnSettings = loadImage(ImgBaseUrl + 'btn-settings.png');
+    BtnBack = loadImage(ImgBaseUrl + 'btn-back.png');
+
+    var testRead = localStorage.getItem("userOptions");
+    if (testRead != null || testRead != undefined) {
+        let parsedUserOptions = JSON.parse(testRead);
+        Options = parsedUserOptions;
+    }
 
     var PreloadAfter = performance.now();
     console.log(`%cResource preload finished!\n%cProcess took ${Math.round((PreloadAfter - PreloadBefore) / 1000)} sec.`, "color: #55ff55","color: #777777")

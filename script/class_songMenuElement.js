@@ -9,7 +9,7 @@ class SongMenuElement {
         push()
 
         if (
-            mouseX > 0 &&
+            mouseX > Layouts.MenuCardLeftMargin+20 &&
             mouseX < Layouts.MenuCardWidth &&
             mouseY > MenuElementsYPosition &&
             mouseY < MenuElementsYPosition + Layouts.MenuCardHeight

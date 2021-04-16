@@ -52,6 +52,17 @@
     "FailBtnRetrySizeY": 96,
     "VersionLabelFontSize":10,
     "VersionLabelAlignY":596,
+    "SettingsBtnAlignX":0,
+    "SettingsBtnAlignY":0,
+    "SettingsBtnSizeX":36,
+    "SettingsBtnSizeY":36,
+    "SettingsBackAlignX":150,
+    "SettingsBackAlignY":550,
+    "SettingsBackSizeX":100,
+    "SettingsBackSizeY":50,
+
+    "SettingsOptionFontSize":20,
+    "SettingsOptionButtonsAlignX":350,
 
     "MenuCardColor":"#303030",
     "MenuCardHoverColor":"#404040",
