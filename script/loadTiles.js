@@ -1,5 +1,4 @@
 LoadTiles = function () {
-    //A -1 miatt az első tile egy szünet, így a billenytűzettel is lehetséges játszani
     tiles.push(new Tile(0, 0, {"n":0}, false, false));
 
     for (var i = 1; i <= Song.Notes.length; i++) {

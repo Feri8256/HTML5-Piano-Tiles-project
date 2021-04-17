@@ -11,19 +11,20 @@ function keyPressed() {
     }
 
     if (ScreenState === 1) {
-        let chkKey;
-        if (tiles[currentTile+1].y >= HitLineOffset) chkKey = tiles[currentTile+1].tilePos;
-        if (key === HitKeys[chkKey] && tiles[currentTile+1].y >= HitLineOffset) {
-            DecodeNote(tiles[currentTile+1].tileNote.n, false, tiles[currentTile+1].tapped);
-            tiles[currentTile+1].tapped = true;
-            if(!AutoPlayEnable){
-                if (tiles[currentTile+1].tileNote.n.length && tiles[currentTile+1].tileNote.n[0].sn) {
-                    Score = Score + tiles[currentTile+1].tileNote.n.length;
+        for (var c = currentTile; c < currentTile + 3; c++) {
+            let chkKey = tiles[c].tilePos;
+            if (key === HitKeys[chkKey] && tiles[c].y >= HitLineOffset && !tiles[c].tapped) {
+                DecodeNote(tiles[c].tileNote.n, false, tiles[c].tapped);
+                if(!AutoPlayEnable){
+                    if (tiles[c].tileNote.n.length && tiles[c].tileNote.n[0].sn) {
+                        Score = Score + tiles[c].tileNote.n.length;
+                    }
+                    else {
+                       Score++; 
+                    }
                 }
-                else {
-                   Score++; 
-                }
-            } 
+                tiles[c].tapped = true;
+            }
         }
     }
 
@@ -39,11 +40,11 @@ function keyPressed() {
     }
 
     if (key === 'i') {
-        if (DisplayInfo) {
-            DisplayInfo = false;
+        if (Options.DisplayInfo) {
+            Options.DisplayInfo = false;
         }
         else {
-            DisplayInfo = true;
+            Options.DisplayInfo = true;
         }
     }
 
