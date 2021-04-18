@@ -13,7 +13,7 @@ function keyPressed() {
     if (ScreenState === 1) {
         for (var c = currentTile; c < currentTile + 3; c++) {
             let chkKey = tiles[c].tilePos;
-            if (key === HitKeys[chkKey] && tiles[c].y >= HitLineOffset && !tiles[c].tapped) {
+            if (key === HitKeys[chkKey] && tiles[c].y >= HitLineOffset && !tiles[c].tapped && !tiles[c].tileNote.n == 0) {
                 DecodeNote(tiles[c].tileNote.n, false, tiles[c].tapped);
                 if(!AutoPlayEnable){
                     if (tiles[c].tileNote.n.length && tiles[c].tileNote.n[0].sn) {
