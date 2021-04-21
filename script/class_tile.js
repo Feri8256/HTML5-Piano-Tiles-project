@@ -25,20 +25,20 @@ class Tile {
                 break;
         }
 
-        const tileYoffset   =   159.99999999999991;
+        const tileYoffset   =   150.3;
 
         if (this.tileNote.n === 0) { //Blank tile
-            image(GameTileBlank, tilePixelPos, this.y - tileYoffset,100,155);
+            image(GameTileBlank, tilePixelPos, this.y - tileYoffset,100,150);
         }
         else {
             if (this.tapped) { //Single tile
-                image(GameTileTapped, tilePixelPos, this.y - tileYoffset,100,155);
+                image(GameTileTapped, tilePixelPos, this.y - tileYoffset,100,150);
             }
             else {
                 if (this.tileNote.n.length && this.tileNote.n[0].sn) {
-                    image(GameTileDouble, tilePixelPos, this.y - tileYoffset,100,155);
+                    image(GameTileDouble, tilePixelPos, this.y - tileYoffset,100,150);
                 }
-                else { image(GameTile, tilePixelPos, this.y - tileYoffset,100,155); }
+                else { image(GameTile, tilePixelPos, this.y - tileYoffset,100,150); }
 
                 //Érintőképernyős bevitelt támogató rész
                 if (touchstart && !this.tapped) {
@@ -48,7 +48,7 @@ class Tile {
                             touches[i].x >= tilePixelPos &&
                             touches[i].x <= tilePixelPos + 100 &&
                             touches[i].y >= this.y - tileYoffset &&
-                            touches[i].y <= this.y - tileYoffset + 160
+                            touches[i].y <= this.y - tileYoffset + 150
                         ) {
                             if (!FailState) {
                                 DecodeNote(this.tileNote.n,false, this.tapped);
@@ -71,7 +71,7 @@ class Tile {
                     mouseX >= tilePixelPos &&
                     mouseX <= tilePixelPos + 100 &&
                     mouseY >= this.y - tileYoffset &&
-                    mouseY <= this.y -tileYoffset + 160
+                    mouseY <= this.y -tileYoffset + 150
                 ) {
                     if (mouseIsPressed && !this.tapped) {
                         if (!FailState) {

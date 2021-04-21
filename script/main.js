@@ -6,7 +6,7 @@ const SndBaseUrl = "assets/res/sounds/";
 const HitLineOffset = 370; 
 const HitWindowAddHeight = 80;
 const HitKeys = ["d","f","j","k"];
-const NextTileAfter =   167.99999999999991;
+const NextTileAfter =   157.6;
 const FailSound = [48,52,55];
 
 /**
@@ -72,7 +72,7 @@ let Lifes = 3;
 let bestScore = 0;
 let newBest = false;
 
-//Buttons, ect.
+//Buttons
 let CheckBoxScore;
 let CheckBoxLifes;
 let CheckBoxRewards;
