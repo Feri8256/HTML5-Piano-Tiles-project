@@ -25,7 +25,7 @@ class Tile {
                 break;
         }
 
-        const tileYoffset   =   150.3;
+        const tileYoffset   =   150;
 
         if (this.tileNote.n === 0) { //Blank tile
             image(GameTileBlank, tilePixelPos, this.y - tileYoffset,100,150);

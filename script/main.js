@@ -1,12 +1,12 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "20210416"
+const versionText = "20210518"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
 const HitLineOffset = 370; 
 const HitWindowAddHeight = 80;
 const HitKeys = ["d","f","j","k"];
-const NextTileAfter =   157.6;
+const NextTileAfter =   150;
 const FailSound = [48,52,55];
 
 /**
@@ -341,53 +341,31 @@ function draw() {
                 text("Best score: "+bestScore, 0, 580)
             }
     
-            if (currentTile < tiles.length) {
-                //Tiles
-                tiles[currentTile].show();
-                tiles[currentTile].animate(currentSpeed)
-    
-                // AutoPlay
-                if (AutoPlayEnable) {
-                    if (tiles[currentTile].y >= 600 && !tiles[currentTile+1].tapped) {
-                        DecodeNote(tiles[currentTile+1].tileNote.n, false, false);
-                        tiles[currentTile+1].tapped = true;
-                    } 
+            for (var i = currentTile; i < currentTile + 6; i++) {
+                if (tiles[i+1]) tiles[i+1].y = tiles[i]?.y - NextTileAfter
+
+                tiles[i]?.show();
+                tiles[i]?.animate(currentSpeed);
+
+                if (AutoPlayEnable && tiles[i]?.y > HitLineOffset && !tiles[i].tapped) {
+                    DecodeNote(tiles[i].tileNote.n, false, false);
+                    tiles[i].tapped = true;
                 }
-    
-                if (tiles[currentTile + 1] && tiles[currentTile].y >= NextTileAfter) {
-                    tiles[currentTile + 1].show();
-                    tiles[currentTile + 1].animate(currentSpeed);
+
+                if (!tiles[i].commandCheck) {
+                    if (tiles[i].tileNote.a) AddSpeed();
+                    if (tiles[i].tileNote.b && completedLap === 0) CalcReward();
+                    tiles[i].commandCheck = true;
                 }
-               
-                if (tiles[currentTile + 2] && tiles[currentTile + 1].y >= NextTileAfter) {
-                    tiles[currentTile + 2].show();
-                    tiles[currentTile + 2].animate(currentSpeed);
+
+                if (currentTile === tilesLength - 5) {
+                    CalcReward();
+                    RepeatSong();
                 }
-                
-                if (tiles[currentTile + 3] && tiles[currentTile + 2].y >= NextTileAfter) {
-                    tiles[currentTile + 3].show();
-                    tiles[currentTile + 3].animate(currentSpeed);
-                }
-               
-                if (tiles[currentTile + 4] && tiles[currentTile + 3].y >= NextTileAfter) {
-                    tiles[currentTile + 4].show();
-                    tiles[currentTile + 4].animate(currentSpeed);
-                }
-                
-                if (tiles[currentTile + 5] && tiles[currentTile + 4].y >= NextTileAfter) {
-                    tiles[currentTile + 5].show();
-                    tiles[currentTile + 5].animate(currentSpeed);
-                    if (tiles[currentTile].y > height && !tiles[currentTile].tapped && tiles[currentTile].tileNote.n != 0) ReduceLife();
-                    if (!tiles[currentTile].commandCheck) {
-                        if (tiles[currentTile].tileNote.a) AddSpeed();
-                        if (tiles[currentTile].tileNote.b && completedLap === 0) CalcReward();
-                        tiles[currentTile].commandCheck = true;
-                    } 
-                    currentTile++;
-                    if (currentTile === tilesLength - 5) {
-                        CalcReward();
-                        RepeatSong();
-                    }
+
+                if (tiles[i]?.y > height + NextTileAfter) {
+                    if (!tiles[i].tapped && tiles[i].tileNote.n !== 0) ReduceLife()
+                    currentTile++
                 }
             }
     
