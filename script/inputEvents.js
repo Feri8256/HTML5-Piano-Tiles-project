@@ -26,46 +26,45 @@ function keyPressed() {
                 tiles[c].tapped = true;
             }
         }
-    }
 
-    if (key === 'r') {
-        if (FailState){
-            RetryFromFail();
+        if (key === 'r') {
+            if (FailState){
+                RetryFromFail();
+            }
+            else {
+                ResetReward();
+                ResetTiles();
+                PauseState = true;
+            }
         }
-        else {
-            ResetReward();
-            ResetTiles();
-            PauseState = true;
+    
+        if (key === 'i') {
+            if (Options.DisplayInfo) {
+                Options.DisplayInfo = false;
+            }
+            else {
+                Options.DisplayInfo = true;
+            }
         }
-    }
-
-    if (key === 'i') {
-        if (Options.DisplayInfo) {
-            Options.DisplayInfo = false;
+    
+        if (key === 'a') {
+            if (AutoPlayEnable) {
+                AutoPlayEnable = false;
+            }
+            else {
+                AutoPlayEnable = true;
+            }
         }
-        else {
-            Options.DisplayInfo = true;
+    
+        if (key === 'q') {
+            SetFail();
         }
-    }
-
-    if (key === 'a') {
-        if (AutoPlayEnable) {
-            AutoPlayEnable = false;
+    
+        if (key === 'x' && FailState) {
+            FailToMenu();
         }
-        else {
-            AutoPlayEnable = true;
-        }
-    }
-
-    if (key === 'q') {
-        SetFail();
-    }
-
-    if (key === 'x' && FailState) {
-        FailToMenu();
     }
 }
-
 
 function touchStarted() {
     touchstart = true;

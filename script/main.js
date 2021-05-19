@@ -1,5 +1,5 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "20210518"
+const versionText = "20210519"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -7,6 +7,7 @@ const HitLineOffset = 370;
 const HitWindowAddHeight = 80;
 const HitKeys = ["d","f","j","k"];
 const NextTileAfter =   150;
+const TilesOnScreen = 6
 const FailSound = [48,52,55];
 
 /**
@@ -225,6 +226,7 @@ function RetryFromFail() {
         ResetReward();
         bestScore = getBestScore(Song.Title);
         newBest = false;
+        AutoPlayEnable = false;
     },500);
 }
 
@@ -264,6 +266,7 @@ function FailToMenu() {
         tiles = [];
         ScreenState = 0;
         newBest = false;
+        AutoPlayEnable = false;
     },300);
 }
 
@@ -341,7 +344,7 @@ function draw() {
                 text("Best score: "+bestScore, 0, 580)
             }
     
-            for (var i = currentTile; i < currentTile + 6; i++) {
+            for (var i = currentTile; i < currentTile + TilesOnScreen; i++) {
                 if (tiles[i+1]) tiles[i+1].y = tiles[i]?.y - NextTileAfter
 
                 tiles[i]?.show();
@@ -363,7 +366,7 @@ function draw() {
                     RepeatSong();
                 }
 
-                if (tiles[i]?.y > height + NextTileAfter) {
+                if (tiles[i]?.y > NextTileAfter * 5) {
                     if (!tiles[i].tapped && tiles[i].tileNote.n !== 0) ReduceLife()
                     currentTile++
                 }
@@ -444,14 +447,23 @@ function draw() {
                     image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
                 }
             }
-            
+            if (AutoPlayEnable) {
+                textSize(Layouts.GameAutoPlayTextFontSize);
+                fill(Layouts.GameAutoPlayTextColor);
+                textAlign(CENTER);
+                text("Autoplay enabled", width/2, Layouts.GameAutoPlayTextMarginTop);
+            }
             //Score display
             if (Options.DisplayScore) {
                 textSize(Layouts.GameScoreFontSize);
                 textAlign(CENTER);
                 textFont(ScoreFont);
+
+                fill(40);
+                text(Score, width / 2, Layouts.GameScoreMarginTop + 2);
+
                 fill(Layouts.GameScoreColor);
-                if (Song) text(Score, width / 2, Layouts.GameScoreMarginTop);
+                text(Score, width / 2, Layouts.GameScoreMarginTop);
             }
            
             //Time progress bar
