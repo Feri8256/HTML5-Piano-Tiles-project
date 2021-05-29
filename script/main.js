@@ -1,5 +1,5 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "20210519"
+const versionText = "20210529"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -105,6 +105,7 @@ let IsItHorizontalScreen = false;
  * 0: menu
  * 1: game
  * 2: loading
+ * 3: end
  */
 let ScreenState = 0;
 
@@ -239,7 +240,7 @@ function SetFail() {
     if (FailState === false && ScreenState === 1) {
         currentSpeed = 0;
         if (Options.PlayFailSound) DecodeNote(FailSound,true);
-        setTimeout(()=>{FailState = true; ScreenState = 3;},1300);
+        setTimeout(()=>{FailState = true; ScreenState = 3;},1500);
         if (Score > bestScore) {
             newBest = true;
             setNewScore(Song.Title, Score);

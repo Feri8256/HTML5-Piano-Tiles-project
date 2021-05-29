@@ -56,13 +56,13 @@ function keyPressed() {
             }
         }
     
-        if (key === 'q') {
-            SetFail();
-        }
-    
-        if (key === 'x' && FailState) {
-            FailToMenu();
-        }
+        if (key === 'q') SetFail();
+        if (key === 'x' && FailState) FailToMenu();
+    }
+
+    if (ScreenState === 3) {
+        if (key === 'x') FailToMenu();
+        if (key === 'r') RetryFromFail();
     }
 }
 
