@@ -231,20 +231,24 @@ function RetryFromFail() {
     },500);
 }
 
-function ReduceLife() {
+function ReduceLife(t) {
     if (Lifes > 0) Lifes--;
-    if (Lifes === 0) SetFail();
+    if (Lifes === 0) SetFail(t);
 }
 
-function SetFail() {
+function SetFail(t) {
     if (FailState === false && ScreenState === 1) {
-        currentSpeed = 0;
+        if (t) t.revealFail()
+        //currentSpeed = 0;
         if (Options.PlayFailSound) DecodeNote(FailSound,true);
-        setTimeout(()=>{FailState = true; ScreenState = 3;},1500);
+
+        if (t){ setTimeout(()=>{FailState = true; ScreenState = 3;},2000) }
+        else { setTimeout(()=>{FailState = true; ScreenState = 3;},300) }
+
         if (Score > bestScore) {
             newBest = true;
             setNewScore(Song.Title, Score);
-        } 
+        }
     }
 }
 
@@ -368,9 +372,11 @@ function draw() {
                 }
 
                 if (tiles[i]?.y > NextTileAfter * 5) {
-                    if (!tiles[i].tapped && tiles[i].tileNote.n !== 0) ReduceLife()
-                    currentTile++
+                    if (!tiles[i].tapped && tiles[i].tileNote.n !== 0 && !tiles[i].failCheck) ReduceLife(tiles[i])
+                    tiles[i].failCheck = true;
                 }
+
+                if (tiles[i]?.y > NextTileAfter * 6) currentTile++
             }
     
             //Red line

@@ -1,11 +1,14 @@
 class Tile {
 
-    constructor(y, tilePos, tileNote, tapped, commandCheck) {
+    constructor(y, tilePos, tileNote, tapped, commandCheck, failCheck) {
         this.y = y;
         this.tilePos = tilePos;
         this.tileNote = tileNote;
         this.tapped = tapped;
         this.commandCheck = commandCheck;
+        this.failCheck = failCheck
+        this.blinksRed = false
+        this.failFired = false
     }
 
     show() {
@@ -90,9 +93,36 @@ class Tile {
                 }
             }
         }
+
+        if (this.blinksRed) {
+            fill(200,10,10)
+            rect(tilePixelPos, this.y - tileYoffset,100,150)
+        }
+
+        if (this.failFired) {
+            if (this.y <= 600) currentSpeed = 0
+        }
     }
 
     animate(currentSpeed) {
         this.y += currentSpeed;
+    }
+
+    revealFail() {
+        this.failFired = true
+        this.blinksRed = true
+        currentSpeed = -(currentSpeed * 0.7)
+        const blinkDuration = 1500
+        const changeInterval = 150
+
+        let blinkInterval = setInterval(()=>{
+            if (!this.blinksRed){ this.blinksRed = true } 
+            else { this.blinksRed = false }
+        }, changeInterval)
+
+        setTimeout(()=>{
+            clearInterval(blinkInterval)
+            this.blinksRed = false
+        }, blinkDuration)
     }
 }
