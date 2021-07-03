@@ -1,5 +1,5 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "20210608"
+const versionText = "20210703"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -33,13 +33,8 @@ let Options = {
 let BackImg;
 let GameBg;
 let GameEndBg;
-let GameTile;
 let GameTileTapped;
-let GameTileBlank;
-let GameTileDouble;
-let GameLines;
 let GameHitLine;
-let FailPanel;
 let ScoreFont;
 let LifeBlank;
 let Life;
@@ -238,12 +233,13 @@ function ReduceLife(t) {
 
 function SetFail(t) {
     if (FailState === false && ScreenState === 1) {
+        FailState = true;
         if (t) t.revealFail()
         //currentSpeed = 0;
         if (Options.PlayFailSound) DecodeNote(FailSound,true);
 
-        if (t){ setTimeout(()=>{FailState = true; ScreenState = 3;},2000) }
-        else { setTimeout(()=>{FailState = true; ScreenState = 3;},300) }
+        if (t){ setTimeout(()=>{ ScreenState = 3; },2000) }
+        else { setTimeout(()=>{ ScreenState = 3; },300) }
 
         if (Score > bestScore) {
             newBest = true;
@@ -329,7 +325,13 @@ function draw() {
             }
 
             image(GameBg, width / 2 - 200, 0,400,AppHeight);
-            image(GameLines, width / 2 - 200, 0,400,AppHeight);
+            //three vertical lines
+            {
+                fill(50);
+                rect(99,0,2,600);
+                rect(199,0,2,600);
+                rect(299,0,2,600);
+            }
     
             if (PauseState) {
                 textSize(Layouts.GameStartTextFontSize);

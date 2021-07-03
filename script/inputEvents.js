@@ -10,7 +10,7 @@ function keyPressed() {
         PauseState = false;
     }
 
-    if (ScreenState === 1) {
+    if (ScreenState === 1 && !FailState) {
         for (var c = currentTile; c < currentTile + 3; c++) {
             let chkKey = tiles[c].tilePos;
             if (key === HitKeys[chkKey] && tiles[c].y >= HitLineOffset && !tiles[c].tapped && !tiles[c].tileNote.n == 0) {

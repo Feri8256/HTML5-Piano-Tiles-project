@@ -6,13 +6,8 @@ function preload() {
     Layouts = loadJSON('assets/style/ui.json');
     GameBg = loadImage(ImgBaseUrl + 'game-bg.png');
     GameEndBg = loadImage(ImgBaseUrl + 'gameend-bg.png');
-    GameLines = loadImage(ImgBaseUrl + 'lines.png');
-    GameTile = loadImage(ImgBaseUrl + 'tile.png');
     GameTileTapped = loadImage(ImgBaseUrl + 'tile-t.png');
-    GameTileBlank = loadImage(ImgBaseUrl + 'tile-b.png');
-    GameTileDouble = loadImage(ImgBaseUrl + 'tile-d.png');
     GameHitLine = loadImage(ImgBaseUrl + 'hitline.png');
-    FailPanel = loadImage(ImgBaseUrl + 'fail-panel.png');
     ScoreFont = loadFont('assets/res/fonts/ocr_a_ext.ttf');
     LifeBlank = loadImage(ImgBaseUrl + 'life-b.png');
     Life = loadImage(ImgBaseUrl + 'life.png');

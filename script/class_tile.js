@@ -1,3 +1,4 @@
+const tileYoffset   =   150;
 class Tile {
 
     constructor(y, tilePos, tileNote, tapped, commandCheck, failCheck) {
@@ -6,50 +7,53 @@ class Tile {
         this.tileNote = tileNote;
         this.tapped = tapped;
         this.commandCheck = commandCheck;
-        this.failCheck = failCheck
-        this.blinksRed = false
-        this.failFired = false
+        this.failCheck = failCheck;
+        this.blinksRed = false;
+        this.failFired = false;
+
+        this.tilePixelPos = 0;
+        switch (this.tilePos) {
+            case 0: //Column 1
+                this.tilePixelPostilePixelPos = width / 2 - 200;
+                break;
+            case 1: //Column 2
+                this.tilePixelPos = width / 2 - 100;
+                break;
+            case 2: //Column 3
+                this.tilePixelPos = width / 2;
+                break;
+            case 3: //Column 4
+                this.tilePixelPos = width / 2 + 100;
+                break;
+        }
     }
 
     show() {
-        let tilePixelPos;
-        switch (this.tilePos) {
-            case 0: //Column 1
-                tilePixelPos = width / 2 - 200;
-                break;
-            case 1: //Column 2
-                tilePixelPos = width / 2 - 100;
-                break;
-            case 2: //Column 3
-                tilePixelPos = width / 2;
-                break;
-            case 3: //Column 4
-                tilePixelPos = width / 2 + 100;
-                break;
-        }
-
-        const tileYoffset   =   150;
-
-        if (this.tileNote.n === 0) { //Blank tile
-            image(GameTileBlank, tilePixelPos, this.y - tileYoffset,100,150);
-        }
-        else {
+        if (this.tileNote.n !== 0) { //Not blank tile
             if (this.tapped) { //Single tile
-                image(GameTileTapped, tilePixelPos, this.y - tileYoffset,100,150);
+                image(GameTileTapped, this.tilePixelPos, this.y - tileYoffset,100,150); 
             }
             else {
                 if (this.tileNote.n.length && this.tileNote.n[0].sn) {
-                    image(GameTileDouble, tilePixelPos, this.y - tileYoffset,100,150);
+                    {
+                        fill(80,80,200);
+                        rect(this.tilePixelPos, this.y - tileYoffset, 100,150);
+                    }
                 }
-                else { image(GameTile, tilePixelPos, this.y - tileYoffset,100,150); }
+                else { 
+                    {
+                        fill(200);
+                        rect(this.tilePixelPos, this.y - tileYoffset, 100,150);
+                    }
+                }
 
                 //Érintőképernyős bevitelt támogató rész
                 if (touchstart && !this.tapped) {
                     //Ellenörzi a azokat a pontokat, ahol a képernyő érintések történtek
                     for (var i = 0; i < touches.length; i++) {
                         if (
-                            touches[i].x >= tilePixelPos &&
-                            touches[i].x <= tilePixelPos + 100 &&
+                            touches[i].x >= this.tilePixelPos &&
+                            touches[i].x <= this.tilePixelPos + 100 &&
                             touches[i].y >= this.y - tileYoffset &&
                             touches[i].y <= this.y - tileYoffset + 150
                         ) {
@@ -71,8 +75,8 @@ class Tile {
 
                 //Egér bevitelt támogató rész
                 if (
-                    mouseX >= tilePixelPos &&
-                    mouseX <= tilePixelPos + 100 &&
+                    mouseX >= this.tilePixelPos &&
+                    mouseX <= this.tilePixelPos + 100 &&
                     mouseY >= this.y - tileYoffset &&
                     mouseY <= this.y -tileYoffset + 150
                 ) {
@@ -96,7 +100,7 @@ class Tile {
 
         if (this.blinksRed) {
             fill(200,10,10)
-            rect(tilePixelPos, this.y - tileYoffset,100,150)
+            rect(this.tilePixelPos, this.y - tileYoffset,100,150)
         }
 
         if (this.failFired) {
