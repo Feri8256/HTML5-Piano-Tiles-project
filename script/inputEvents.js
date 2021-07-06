@@ -68,8 +68,7 @@ function keyPressed() {
 
 function touchStarted() {
     touchstart = true;
-
-    //Nem engedi, hogy a hosszabb ideig rajta tartott újjak érvényesnek számítsanak
+    //Nem engedi, hogy a hosszabb ideig rajta tartott ujjak érvényesnek számítsanak
     if (touches.length >= 2) {
         setTimeout(()=>{
             touchstart = false;

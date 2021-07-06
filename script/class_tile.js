@@ -10,6 +10,7 @@ class Tile {
         this.failCheck = failCheck;
         this.blinksRed = false;
         this.failFired = false;
+        this.tappedAlpha = 256;
 
         this.tilePixelPos = 0;
         switch (this.tilePos) {
@@ -30,8 +31,14 @@ class Tile {
 
     show() {
         if (this.tileNote.n !== 0) { //Not blank tile
-            if (this.tapped) { //Single tile
-                image(GameTileTapped, this.tilePixelPos, this.y - tileYoffset,100,150); 
+            if (this.tapped) {
+                {
+                    let tappedColor = color(70,70,70);
+                    let newAlphaValue = this.tappedAlpha > 60 ? this.tappedAlpha = this.tappedAlpha-20 : 60;
+                    tappedColor.setAlpha(newAlphaValue);
+                    fill(tappedColor);
+                    rect(this.tilePixelPos, this.y - tileYoffset, 100,150);
+                }
             }
             else {
                 if (this.tileNote.n.length && this.tileNote.n[0].sn) {
@@ -115,18 +122,18 @@ class Tile {
     revealFail() {
         this.failFired = true
         this.blinksRed = true
-        currentSpeed = -(currentSpeed * 0.7)
+        currentSpeed =  -10;
         const blinkDuration = 1500
         const changeInterval = 150
 
         let blinkInterval = setInterval(()=>{
             if (!this.blinksRed){ this.blinksRed = true } 
             else { this.blinksRed = false }
-        }, changeInterval)
+        }, changeInterval);
 
         setTimeout(()=>{
             clearInterval(blinkInterval)
             this.blinksRed = false
-        }, blinkDuration)
+        }, blinkDuration);
     }
 }

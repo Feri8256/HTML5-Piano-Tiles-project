@@ -1,5 +1,5 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "20210703"
+const versionText = "20210706"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -33,7 +33,6 @@ let Options = {
 let BackImg;
 let GameBg;
 let GameEndBg;
-let GameTileTapped;
 let GameHitLine;
 let ScoreFont;
 let LifeBlank;
@@ -235,8 +234,7 @@ function SetFail(t) {
     if (FailState === false && ScreenState === 1) {
         FailState = true;
         if (t) t.revealFail()
-        //currentSpeed = 0;
-        if (Options.PlayFailSound) DecodeNote(FailSound,true);
+        if (t && Options.PlayFailSound) DecodeNote(FailSound,true);
 
         if (t){ setTimeout(()=>{ ScreenState = 3; },2000) }
         else { setTimeout(()=>{ ScreenState = 3; },300) }
@@ -338,7 +336,10 @@ function draw() {
                 textAlign(CENTER);
                 fill(Layouts.GameStartTextColor);
                 if (IsItHorizontalScreen) {
-                    text("Press\nD / F / J / K", 200, Layouts.GameStartTextAlignY);
+                    text(HitKeys[0], 50, Layouts.GameStartTextAlignY);
+                    text(HitKeys[1], 150, Layouts.GameStartTextAlignY);
+                    text(HitKeys[2], 250, Layouts.GameStartTextAlignY);
+                    text(HitKeys[3], 350, Layouts.GameStartTextAlignY);
                 }
                 else {
                     text("Tap to start", 200, Layouts.GameStartTextAlignY);
@@ -351,7 +352,7 @@ function draw() {
                 text("Best score: "+bestScore, 0, 580)
             }
     
-            for (var i = currentTile; i < currentTile + TilesOnScreen; i++) {
+            for (let i = currentTile; i < currentTile + TilesOnScreen; i++) {
                 if (tiles[i+1]) tiles[i+1].y = tiles[i]?.y - NextTileAfter
 
                 tiles[i]?.show();

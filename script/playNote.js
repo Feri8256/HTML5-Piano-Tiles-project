@@ -181,6 +181,7 @@ function PreloadPianoSounds(){
 PlayNote = {
     //Ez a rész felelős a szám értékek alapján a megfelelő hang megszólaltatásáért.
     //A középső C hang értéke 60. Ezzel kell elszámolni!
+    0: function () { return },
     21: function () { Piano21.play() },
     22: function () { Piano22.play() },
     23: function () { Piano23.play() },

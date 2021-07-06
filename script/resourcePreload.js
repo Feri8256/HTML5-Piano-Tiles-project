@@ -6,7 +6,6 @@ function preload() {
     Layouts = loadJSON('assets/style/ui.json');
     GameBg = loadImage(ImgBaseUrl + 'game-bg.png');
     GameEndBg = loadImage(ImgBaseUrl + 'gameend-bg.png');
-    GameTileTapped = loadImage(ImgBaseUrl + 'tile-t.png');
     GameHitLine = loadImage(ImgBaseUrl + 'hitline.png');
     ScoreFont = loadFont('assets/res/fonts/ocr_a_ext.ttf');
     LifeBlank = loadImage(ImgBaseUrl + 'life-b.png');

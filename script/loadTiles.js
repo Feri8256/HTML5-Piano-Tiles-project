@@ -1,27 +1,25 @@
 LoadTiles = function () {
-    tiles.push(new Tile(0, 0, {"n":0}, false, false, false));
+    let tilePositions = [];
+    let {Notes} = Song;
 
-    for (var i = 1; i <= Song.Notes.length; i++) {
-        let tilePosA = Math.floor(random(0, 4));
-        let tilePosNotSame;
-        let tile;
-
-        if (tiles[i - 1] && tiles[i - 1].tilePos === tilePosA) {
-            while (tiles[i - 1].tilePos === tilePosA) {
-                tilePosA = Math.floor(random(0, 4));
+    for (let i in Notes) {
+        let r = Math.floor(random(0, 4));
+        if (tilePositions.length > 0) {
+            while (tilePositions[i - 1] === r) {
+                r = Math.floor(random(0, 4));
+                
             }
-            tilePosNotSame = tilePosA;
-        }
+            tilePositions.push(r);
+        } 
         else {
-            tilePosNotSame = tilePosA;
+            tilePositions.push(r);
         }
 
-        tile = new Tile(0, tilePosNotSame, Song.Notes[i-1], false, false, false);
-        tiles.push(tile);
+        tiles.push(new Tile(0, r, Notes[i], false, false, false));
     }
 
-    //A vége pedig +5, hogy szebben jelenjen meg a játék
-    for (var i = 0; i < 5; i++) {
+    //+5 rows for ending properly
+    for (let a = 0; a < 4; a++) {
         tiles.push(new Tile(0, 0, {"n":0}, false, false, false));
     }
 
