@@ -23,13 +23,8 @@ class uiCheckbox {
             mouseY < this.posY + this.sizeY &&
             mouseIsPressed && !this.pressedOnce
         ) {
-           
-            if (!this.state) {
-                this.state = true;
-            } 
-            else {
-                this.state = false;
-            }
+
+            this.state = !this.state;
 
             this.callback(this.state);
             this.pressedOnce = true
