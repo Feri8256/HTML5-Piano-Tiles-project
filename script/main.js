@@ -49,6 +49,7 @@ let UICheckBoxBase;
 let UICheckboxMark;
 let BtnSettings;
 let BtnBack;
+let Glare;
 
 //Game variables
 let Song;
@@ -99,6 +100,7 @@ let MenuElementsYPosition = 0;
 let SongListElements = [];
 let RewardCounterSmall;
 let RewardCounterLarge;
+let LifeDisplaySmall;
 let LoadMenu;
 let SongList;
 let PlayNote;
@@ -132,8 +134,9 @@ function setup() {
     RetryButton = new uiIconButton(BtnRetry, Layouts.FailBtnRetryAlignX, Layouts.FailBtnRetryAlignY, Layouts.FailBtnRetrySizeX, Layouts.FailBtnRetrySizeY, RetryFromFail, 250);
     SettingsButton = new uiIconButton(BtnSettings, Layouts.SettingsBtnAlignX, Layouts.SettingsBtnAlignY, Layouts.SettingsBtnSizeX, Layouts.SettingsBtnSizeY, MenuToSettings, 250);
     SettingsBackButton = new uiIconButton(BtnBack, Layouts.SettingsBackAlignX, Layouts.SettingsBackAlignY, Layouts.SettingsBackSizeX, Layouts.SettingsBackSizeY, SettingsToMenu, 250);
-    RewardCounterSmall = new RewardCounter(Star, StarBlank, Crown, CrownBlank, Layouts.GameRewardAlignX, 0, Layouts.GameRewardSizeX, Layouts.GameRewardSizeY, 36);
-    RewardCounterLarge = new RewardCounter(Star, StarBlank, Crown, CrownBlank, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY, 60);
+    RewardCounterSmall = new RewardCounter(Star, StarBlank, Crown, CrownBlank, Glare, Layouts.GameRewardAlignX, 0, Layouts.GameRewardSizeX, Layouts.GameRewardSizeY, 36);
+    RewardCounterLarge = new RewardCounter(Star, StarBlank, Crown, CrownBlank, Glare, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY, 60);
+    LifeDisplaySmall = new LifeDisplay(Life, LifeBlank, Layouts.GameLifeAlignX, 0, 36, 36, 36);
     //Is it desktop screen?
     if (AppWidth > AppHeight) IsItHorizontalScreen = true;
 
@@ -173,7 +176,7 @@ function ResetTiles() {
     currentSpeed = 0;
     completedLap = 0;
     FailState = false;
-    Lifes = 3;
+    LifeDisplaySmall.reset();
     LoadTiles();
 }
 
@@ -218,8 +221,8 @@ function RetryFromFail() {
 }
 
 function ReduceLife(t) {
-    if (Lifes > 0) Lifes--;
-    if (Lifes === 0) SetFail(t);
+    LifeDisplaySmall.countDown();
+    if (LifeDisplaySmall.counter === 0) SetFail(t);
 }
 
 function SetFail(t) {
@@ -252,7 +255,7 @@ function FailToMenu() {
         currentTile = 0;
         completedLap = 0;
         ResetReward();
-        Lifes = 3;
+        LifeDisplaySmall.reset();
         Score = 0;
         tiles = [];
         ScreenState = 0;
@@ -394,27 +397,9 @@ function draw() {
             
             //Life display
             if (Options.DisplayLifes) {
-                if (Lifes === 3) {
-                    image(Life, Layouts.GameLife3AlignX, 0, 36,36);
-                    image(Life, Layouts.GameLife2AlignX, 0, 36,36);
-                    image(Life, Layouts.GameLife1AlignX, 0, 36,36);
-                }
-                else if (Lifes === 2) {
-                    image(Life, Layouts.GameLife3AlignX, 0, 36,36);
-                    image(Life, Layouts.GameLife2AlignX, 0, 36,36);
-                    image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
-                }
-                else if(Lifes === 1) {
-                    image(Life, Layouts.GameLife3AlignX, 0, 36,36);
-                    image(LifeBlank, Layouts.GameLife2AlignX, 0, 36,36);
-                    image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
-                }
-                else if(Lifes === 0) {
-                    image(LifeBlank, Layouts.GameLife3AlignX, 0, 36,36);
-                    image(LifeBlank, Layouts.GameLife2AlignX, 0, 36,36);
-                    image(LifeBlank, Layouts.GameLife1AlignX, 0, 36,36);
-                }
+                LifeDisplaySmall.show();
             }
+
             if (AutoPlayEnable) {
                 textSize(Layouts.GameAutoPlayTextFontSize);
                 fill(Layouts.GameAutoPlayTextColor);

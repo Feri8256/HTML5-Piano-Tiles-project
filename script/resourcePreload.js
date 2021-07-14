@@ -23,6 +23,8 @@ function preload() {
     UICheckboxMark = loadImage(ImgBaseUrl + 'checkbox-mark.png');
     BtnSettings = loadImage(ImgBaseUrl + 'btn-settings.png');
     BtnBack = loadImage(ImgBaseUrl + 'btn-back.png');
+    Glare = loadImage(ImgBaseUrl + 'glare.png');
+
 
     var testRead = localStorage.getItem("userOptions");
     if (testRead != null || testRead != undefined) {
