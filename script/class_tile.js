@@ -33,8 +33,8 @@ class Tile {
         if (this.tileNote.n !== 0) { //Not blank tile
             if (this.tapped) {
                 {
-                    let tappedColor = color(70,70,70);
-                    let newAlphaValue = this.tappedAlpha > 60 ? this.tappedAlpha = this.tappedAlpha-20 : 60;
+                    let tappedColor = color(100,100,100);
+                    let newAlphaValue = this.tappedAlpha > 40 ? this.tappedAlpha = this.tappedAlpha-20 : 40;
                     tappedColor.setAlpha(newAlphaValue);
                     fill(tappedColor);
                     rect(this.tilePixelPos, this.y - tileYoffset, 100,150);

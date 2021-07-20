@@ -21,7 +21,7 @@ class RewardCounter {
             if (this.counter < 4) {
                 if (i <= this.counter) {
                     image(this.star, alignX, this.posY, this.sizeX, this.sizeY);
-                    if (i === this.counter) {
+                    if (i === this.counter && this.glareTransparency > 0) {
                         push()
                         tint(255, this.glareTransparency > 10 ? this.glareTransparency = this.glareTransparency-10 : 0)
                         image(this.glare, alignX, this.posY, this.sizeX, this.sizeY);
@@ -34,7 +34,7 @@ class RewardCounter {
             }
             //Crowns
             else {
-                if (i <= this.counter-3) {
+                if (i <= this.counter-3 && this.glareTransparency > 0) {
                     image(this.crown, alignX, this.posY, this.sizeX, this.sizeY);
                     if (i === this.counter-3) {
                         push()

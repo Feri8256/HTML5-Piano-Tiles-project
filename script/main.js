@@ -29,27 +29,8 @@ let Options = {
     HighQuality: true,
 }
 
-//image res
-let BackImg;
-let GameBg;
-let GameEndBg;
-let GameHitLine;
-let ScoreFont;
-let LifeBlank;
-let Life;
-let Star;
-let StarBlank;
-let Crown;
-let CrownBlank;
-let BtnMenu;
-let BtnRetry;
-let BtnArrowUp;
-let BtnArrowDown;
-let UICheckBoxBase;
-let UICheckboxMark;
-let BtnSettings;
-let BtnBack;
-let Glare;
+let GameIcons;
+let GameIconsJSON;
 
 //Game variables
 let Song;
@@ -121,6 +102,10 @@ function setup() {
     AppWidth = window.innerWidth;
     AppHeight = window.innerHeight;
 
+    for (let i in GameIconsJSON) {
+        this[GameIconsJSON[i].name] = GameIcons.get(GameIconsJSON[i].x, GameIconsJSON[i].y, GameIconsJSON[i].w, GameIconsJSON[i].h);
+    }
+
     CheckBoxScore = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 15, 40, 40, Options.DisplayScore, function(r){Options.DisplayScore = r}, 250);
     CheckBoxLifes = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 75, 40, 40, Options.DisplayLifes, function(r){Options.DisplayLifes = r}, 250);
     CheckBoxRewards = new uiCheckbox(UICheckBoxBase, UICheckboxMark, Layouts.SettingsOptionButtonsAlignX, 135, 40, 40, Options.DisplayRewards, function(r){Options.DisplayRewards = r}, 250);
@@ -134,9 +119,9 @@ function setup() {
     RetryButton = new uiIconButton(BtnRetry, Layouts.FailBtnRetryAlignX, Layouts.FailBtnRetryAlignY, Layouts.FailBtnRetrySizeX, Layouts.FailBtnRetrySizeY, RetryFromFail, 250);
     SettingsButton = new uiIconButton(BtnSettings, Layouts.SettingsBtnAlignX, Layouts.SettingsBtnAlignY, Layouts.SettingsBtnSizeX, Layouts.SettingsBtnSizeY, MenuToSettings, 250);
     SettingsBackButton = new uiIconButton(BtnBack, Layouts.SettingsBackAlignX, Layouts.SettingsBackAlignY, Layouts.SettingsBackSizeX, Layouts.SettingsBackSizeY, SettingsToMenu, 250);
-    RewardCounterSmall = new RewardCounter(Star, StarBlank, Crown, CrownBlank, Glare, Layouts.GameRewardAlignX, 0, Layouts.GameRewardSizeX, Layouts.GameRewardSizeY, 36);
-    RewardCounterLarge = new RewardCounter(Star, StarBlank, Crown, CrownBlank, Glare, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY, 60);
-    LifeDisplaySmall = new LifeDisplay(Life, LifeBlank, Layouts.GameLifeAlignX, 0, 36, 36, 36);
+    RewardCounterSmall = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.GameRewardAlignX, 0, Layouts.GameRewardSizeX, Layouts.GameRewardSizeY, 36);
+    RewardCounterLarge = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY, 60);
+    LifeDisplaySmall = new LifeDisplay(Life, Life_faded, Layouts.GameLifeAlignX, 0, 36, 36, 36);
     //Is it desktop screen?
     if (AppWidth > AppHeight) IsItHorizontalScreen = true;
 
