@@ -1,0 +1,10 @@
+[
+   { "name":"Button_down", "x":0, "y":0, "w":64, "h":96 },
+   { "name":"Button_up", "x":64, "y":0, "w":64, "h":96 },
+   { "name":"Button_menu", "x":128, "y":0, "w":64, "h":64 },
+   { "name":"Button_retry", "x":192, "y":0, "w":64, "h":64 },
+   { "name":"Button_settings", "x":256, "y":0, "w":64, "h":64 },
+   { "name":"Button_back", "x":448, "y":0, "w":64, "h":64 },
+   { "name":"Checkbox_base", "x":320, "y":0, "w":64, "h":64 },
+   { "name":"Checkbox_mark", "x":384, "y":0, "w":64, "h":64 }
+]

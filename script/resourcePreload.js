@@ -10,18 +10,13 @@ function preload() {
     GameIcons = loadImage(ImgBaseUrl + 'game-icons.png');
     GameIconsJSON = loadJSON(ImgBaseUrl + 'game-icons.json');
 
+    Buttons = loadImage(ImgBaseUrl + 'buttons.png');
+    ButtonsJSON = loadJSON(ImgBaseUrl + 'buttons.json');
+
     GameEndBg = loadImage(ImgBaseUrl + 'gameend-bg.png');
     GameHitLine = loadImage(ImgBaseUrl + 'hitline.png');
     ScoreFont = loadFont('assets/res/fonts/ocr_a_ext.ttf');
     SongList = loadJSON('assets/res/songlist.json');
-    BtnMenu = loadImage(ImgBaseUrl + 'btn-menu.png');
-    BtnRetry = loadImage(ImgBaseUrl + 'btn-retry.png');
-    BtnArrowUp = loadImage(ImgBaseUrl + 'btn-up.png');
-    BtnArrowDown = loadImage(ImgBaseUrl + 'btn-down.png');
-    UICheckBoxBase = loadImage(ImgBaseUrl + 'checkbox.png');
-    UICheckboxMark = loadImage(ImgBaseUrl + 'checkbox-mark.png');
-    BtnSettings = loadImage(ImgBaseUrl + 'btn-settings.png');
-    BtnBack = loadImage(ImgBaseUrl + 'btn-back.png');
 
     var testRead = localStorage.getItem("userOptions");
     if (testRead != null || testRead != undefined) {
