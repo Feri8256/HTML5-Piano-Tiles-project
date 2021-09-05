@@ -89,12 +89,10 @@ let LoadMenu;
 let SongList;
 let PlayNote;
 let LoadTiles;
-let canvas;
+let canvasElement;
 
-let AppWidth = 0;
-let AppHeight = 0;
-
-let CanvasCenterPosition = 0;
+let bodyWidth = 0;
+let bodyHeight = 0;
 
 window.onerror = function () {
     var confirmation = confirm('Sorry!... A script error occurred. Press OK to reload the page.');
@@ -102,8 +100,8 @@ window.onerror = function () {
 }
 
 function setup() {
-    AppWidth = window.innerWidth;
-    AppHeight = window.innerHeight;
+    bodyWidth = window.innerWidth;
+    bodyHeight = window.innerHeight;
 
     for (let i in GameIconsJSON) {
         this[GameIconsJSON[i].name] = GameIcons.get(GameIconsJSON[i].x, GameIconsJSON[i].y, GameIconsJSON[i].w, GameIconsJSON[i].h);
@@ -129,22 +127,36 @@ function setup() {
     RewardCounterSmall = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.GameRewardAlignX, 0, Layouts.GameRewardSizeX, Layouts.GameRewardSizeY, 36);
     RewardCounterLarge = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY, 60);
     LifeDisplaySmall = new LifeDisplay(Life, Life_faded, Layouts.GameLifeAlignX, 0, 36, 36, 36);
-    //Is it desktop screen?
-    if (AppWidth > AppHeight) IsItHorizontalScreen = true;
 
-    CanvasCenterPosition = AppWidth / 2;
-
-    canvas = createCanvas(400,600); //400x600
-    canvas.position(window.innerWidth / 2 - 200, 0);
+    createCanvas(400,600);
     frameRate(60);
     if (!Options.HighQuality) pixelDensity(1);
     noStroke();
     LoadMenu();
 
+    canvasElement = document.querySelector('.p5Canvas');
+    canvasElement.removeAttribute('style');
+
+    if (window.innerWidth > window.innerHeight) {
+        canvasElement.classList.add('desktop');
+    }
+
+    if (window.innerWidth < window.innerHeight) {
+        canvasElement.classList.add('mobile');
+    }
+
 }
 
 function windowResized() {
-    canvas.position(window.innerWidth / 2 - 200, 0);
+    if (window.innerWidth > window.innerHeight) {
+        if (canvasElement.classList.contains('mobile')) canvasElement.classList.remove('mobile');
+        canvasElement.classList.add('desktop');
+    }
+
+    if (window.innerWidth < window.innerHeight) {
+        if (canvasElement.classList.contains('desktop')) canvasElement.classList.remove('desktop');
+        canvasElement.classList.add('mobile');
+    }
 }
 
 function getBestScore(id){
@@ -309,7 +321,7 @@ function draw() {
                 PauseState = false;
             }
 
-            image(GameBg, width / 2 - 200, 0,400,AppHeight);
+            image(GameBg, width / 2 - 200, 0,400,bodyHeight);
             //three vertical lines
             {
                 fill(50);

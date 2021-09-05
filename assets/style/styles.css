@@ -23,6 +23,21 @@ body {
     -webkit-animation-timing-function: linear;
 }
 
+main {
+    display: flex;
+    justify-content: center;
+}
+
+.desktop {
+    position: absolute;
+    height: -webkit-fill-available;
+}
+
+.mobile {
+    position: absolute;
+    width: -webkit-fill-available;
+}
+
 @keyframes loadingAnimation {
     0% {
         transform: rotate(0deg);
