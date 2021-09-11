@@ -1,5 +1,4 @@
 console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; font-family: Arial");
-const versionText = "20210712"
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
@@ -67,7 +66,7 @@ let MenuArrowUpButton;
 let SettingsButton;
 let SettingsBackButton;
 
-let IsItHorizontalScreen = false;
+let isItDesktopScreen = false;
 
 /**
  * 0: menu
@@ -139,6 +138,7 @@ function setup() {
 
     if (window.innerWidth > window.innerHeight) {
         canvasElement.classList.add('desktop');
+        isItDesktopScreen = true;
     }
 
     if (window.innerWidth < window.innerHeight) {
@@ -296,7 +296,7 @@ function draw() {
                 if (MenuElementsYPosition === 120 * 5) MenuElementsYPosition = 0;
             }
     
-            if (!IsItHorizontalScreen) {
+            if (!isItDesktopScreen) {
                 if (MenuPageNumber != 0) {
                     MenuArrowUpButton.draw();
                 }
@@ -334,7 +334,7 @@ function draw() {
                 textSize(Layouts.GameStartTextFontSize);
                 textAlign(CENTER);
                 fill(Layouts.GameStartTextColor);
-                if (IsItHorizontalScreen) {
+                if (isItDesktopScreen) {
                     text(HitKeys[0], 50, Layouts.GameStartTextAlignY);
                     text(HitKeys[1], 150, Layouts.GameStartTextAlignY);
                     text(HitKeys[2], 250, Layouts.GameStartTextAlignY);
@@ -382,7 +382,7 @@ function draw() {
             }
     
             //Red line
-            if (IsItHorizontalScreen) image(GameHitLine, width / 2 - 200, HitLineOffset + 105);
+            if (isItDesktopScreen) image(GameHitLine, width / 2 - 200, HitLineOffset + 105);
     
             //Info display
             if (Options.DisplayInfo) {
@@ -508,10 +508,4 @@ function draw() {
             SettingsBackButton.draw()
             break;
     }
-
-    textFont(ScoreFont);
-    textAlign(LEFT);
-    textSize(Layouts.VersionLabelFontSize);
-    fill(Layouts.VersionLabelColor);
-    text(versionText, 2, Layouts.VersionLabelAlignY);
 }

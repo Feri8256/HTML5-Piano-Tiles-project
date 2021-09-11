@@ -11,6 +11,8 @@ class Tile {
         this.blinksRed = false;
         this.failFired = false;
         this.tappedAlpha = 256;
+        this.bonusPopupSize = 60;
+        this.bonusPopupAlpha = 256;
 
         this.tilePixelPos = 0;
         switch (this.tilePos) {
@@ -39,20 +41,21 @@ class Tile {
                     fill(tappedColor);
                     rect(this.tilePixelPos, this.y - tileYoffset, 100,150);
                 }
+
+                if (this.tileNote.n.length && this.tileNote.n[0].sn) {
+                    textAlign(CENTER)
+                    textSize(this.bonusPopupSize < 150 ? this.bonusPopupSize += 3 : this.bonusPopupSize = 150)
+                    let bonusColor = color(80,80,200);
+                    let newAlphaValue = this.bonusPopupAlpha > 10 ? this.bonusPopupAlpha -= 10 : 0;
+                    bonusColor.setAlpha(newAlphaValue);
+                    fill(bonusColor);
+                    text(`+${this.tileNote.n.length}`, this.tilePixelPos+50, this.y - tileYoffset);
+                } 
             }
             else {
-                if (this.tileNote.n.length && this.tileNote.n[0].sn) {
-                    {
-                        fill(80,80,200);
-                        rect(this.tilePixelPos, this.y - tileYoffset, 100,150);
-                    }
-                }
-                else { 
-                    {
-                        fill(200);
-                        rect(this.tilePixelPos, this.y - tileYoffset, 100,150);
-                    }
-                }
+                if (this.tileNote.n.length && this.tileNote.n[0].sn) fill(80,80,200);
+                else fill(200);
+                rect(this.tilePixelPos, this.y - tileYoffset, 100,150)
 
                 //Érintőképernyős bevitelt támogató rész
                 if (touchstart && !this.tapped) {
@@ -127,8 +130,7 @@ class Tile {
         const changeInterval = 150
 
         let blinkInterval = setInterval(()=>{
-            if (!this.blinksRed){ this.blinksRed = true } 
-            else { this.blinksRed = false }
+            this.blinksRed = !this.blinksRed;
         }, changeInterval);
 
         setTimeout(()=>{
