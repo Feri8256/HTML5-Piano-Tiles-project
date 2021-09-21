@@ -481,7 +481,7 @@ function draw() {
         //Settings
         case 4:
             background(16)
-            
+            textAlign(LEFT)
             textSize(Layouts.SettingsOptionFontSize)
             fill(160)
             text('Display score', 20, 40)

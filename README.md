@@ -4,7 +4,7 @@
 Böngészőben futó, funkcióiban és megjelenésében leegyszerűsített, sötét témás Piano Tiles-klón, amely lényegben próbál hasonlítani az eredeti alkalmazásra.   
 
 ### Források   
-Az elkészítéséhez a [p5.js](https://p5js.org/) és a [WadJS](https://github.com/rserota/wad) könyvtárakat használtam fel, illetve a zongora hangmintákat az eredeti apk-ból szereztem.   
+Az elkészítéséhez a [p5.js](https://p5js.org/) könyvtárt használtam fel, illetve a zongora hangmintákat az eredeti apk-ból szereztem.   
 
 ### Dalok   
 A jövőben elképzelhető, hogy a lista még bővülni fog.   
