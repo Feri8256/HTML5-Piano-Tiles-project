@@ -11,19 +11,10 @@ function keyPressed() {
     }
 
     if (ScreenState === 1 && !FailState) {
-        for (var c = currentTile; c < currentTile + 3; c++) {
+        for (let c = currentTile; c < currentTile + 3; c++) {
             let chkKey = tiles[c].tilePos;
-            if (key === HitKeys[chkKey] && tiles[c].y >= HitLineOffset && !tiles[c].tapped && !tiles[c].tileNote.n == 0) {
-                DecodeNote(tiles[c].tileNote.n, false, tiles[c].tapped);
-                if(!AutoPlayEnable){
-                    if (tiles[c].tileNote.n.length && tiles[c].tileNote.n[0].sn) {
-                        Score = Score + tiles[c].tileNote.n.length;
-                    }
-                    else {
-                       Score++; 
-                    }
-                }
-                tiles[c].tapped = true;
+            if (key === HitKeys[chkKey] && tiles[c].y >= HitLineOffset && !tiles[c].tapped && tiles[c].tileNote !== 0) {
+                tiles[c].tap()
             }
         }
 

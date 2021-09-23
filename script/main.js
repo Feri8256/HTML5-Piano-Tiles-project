@@ -233,7 +233,7 @@ function SetFail(t) {
     if (FailState === false && ScreenState === 1) {
         FailState = true;
         if (t) t.revealFail()
-        if (t && Options.PlayFailSound) DecodeNote(FailSound,true);
+        if (t && Options.PlayFailSound) DecodeNote(FailSound);
 
         if (t){ setTimeout(()=>{ ScreenState = 3; },2000) }
         else { setTimeout(()=>{ ScreenState = 3; },300) }
@@ -257,6 +257,7 @@ function FailToMenu() {
     setTimeout(()=>{
         Song = null;
         currentTile = 0;
+        currentSpeed = 0;
         completedLap = 0;
         ResetReward();
         LifeDisplaySmall.reset();
@@ -358,13 +359,12 @@ function draw() {
                 tiles[i]?.animate(currentSpeed);
 
                 if (AutoPlayEnable && tiles[i]?.y > HitLineOffset && !tiles[i].tapped) {
-                    DecodeNote(tiles[i].tileNote.n, false, false);
-                    tiles[i].tapped = true;
+                    tiles[i].tap();
                 }
 
                 if (!tiles[i].commandCheck) {
-                    if (tiles[i].tileNote.a) AddSpeed();
-                    if (tiles[i].tileNote.b && completedLap === 0) CalcReward();
+                    if (tiles[i].tileNoteObject.a) AddSpeed();
+                    if (tiles[i].tileNoteObject.b && completedLap === 0) CalcReward();
                     tiles[i].commandCheck = true;
                 }
 
@@ -374,7 +374,7 @@ function draw() {
                 }
 
                 if (tiles[i]?.y > NextTileAfter * 5) {
-                    if (!tiles[i].tapped && tiles[i].tileNote.n !== 0 && !tiles[i].failCheck) ReduceLife(tiles[i])
+                    if (!tiles[i].tapped && tiles[i].tileType !== 0 && !tiles[i].failCheck) ReduceLife(tiles[i])
                     tiles[i].failCheck = true;
                 }
 

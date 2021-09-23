@@ -1,13 +1,18 @@
+function delayTimer(ms) {
+    return new Promise(res => setTimeout(res, ms));
+}
 const tileYoffset   =   150;
 class Tile {
 
-    constructor(y, tilePos, tileNote, tapped, commandCheck, failCheck) {
-        this.y = y;
+    constructor(tilePos, tileNote) {
+        this.y = 0;
         this.tilePos = tilePos;
-        this.tileNote = tileNote;
-        this.tapped = tapped;
-        this.commandCheck = commandCheck;
-        this.failCheck = failCheck;
+        this.tileNoteObject = tileNote;
+        this.tileNote = tileNote.n;
+        this.tileType = 0;
+        this.tapped = false;
+        this.commandCheck = false;
+        this.failCheck = false;
         this.blinksRed = false;
         this.failFired = false;
         this.tappedAlpha = 256;
@@ -29,10 +34,15 @@ class Tile {
                 this.tilePixelPos = width / 2 + 100;
                 break;
         }
+
+        if (this.tileNote === 0) this.tileType = 0;
+        if (this.tileNote !== 0) this.tileType = 1;
+        if (this.tileNote[0] && this.tileNote[0].sn) this.tileType = 2;
+
     }
 
     show() {
-        if (this.tileNote.n !== 0) { //Not blank tile
+        if (this.tileType !== 0) { //Not blank tile
             if (this.tapped) {
                 {
                     let tappedColor = color(100,100,100);
@@ -42,18 +52,18 @@ class Tile {
                     rect(this.tilePixelPos, this.y - tileYoffset, 100,150);
                 }
 
-                if (this.tileNote.n.length && this.tileNote.n[0].sn) {
+                if (this.tileType === 2) {
                     textAlign(CENTER)
-                    textSize(this.bonusPopupSize < 150 ? this.bonusPopupSize += 3 : this.bonusPopupSize = 150)
+                    textSize(this.bonusPopupSize < 100 ? this.bonusPopupSize += 2 : this.bonusPopupSize = 100)
                     let bonusColor = color(80,80,200);
                     let newAlphaValue = this.bonusPopupAlpha > 10 ? this.bonusPopupAlpha -= 10 : 0;
                     bonusColor.setAlpha(newAlphaValue);
                     fill(bonusColor);
-                    text(`+${this.tileNote.n.length}`, this.tilePixelPos+50, this.y - tileYoffset);
+                    text(`+${this.tileNote.length}`, this.tilePixelPos+50, this.y - tileYoffset);
                 } 
             }
             else {
-                if (this.tileNote.n.length && this.tileNote.n[0].sn) fill(80,80,200);
+                if (this.tileType === 2) fill(80,80,200);
                 else fill(200);
                 rect(this.tilePixelPos, this.y - tileYoffset, 100,150)
 
@@ -68,16 +78,7 @@ class Tile {
                             touches[i].y <= this.y - tileYoffset + 150
                         ) {
                             if (!FailState) {
-                                DecodeNote(this.tileNote.n,false, this.tapped);
-                                this.tapped = true;
-                                if(!AutoPlayEnable){
-                                    if (this.tileNote.n.length && this.tileNote.n[0].sn) {
-                                        Score = Score + this.tileNote.n.length;
-                                    }
-                                    else {
-                                       Score++; 
-                                    }
-                                } 
+                                this.tap();
                             }
                         }
                     }
@@ -92,16 +93,7 @@ class Tile {
                 ) {
                     if (mouseIsPressed && !this.tapped) {
                         if (!FailState) {
-                            DecodeNote(this.tileNote.n,false, this.tapped);
-                            this.tapped = true;
-                            if(!AutoPlayEnable){
-                                if (this.tileNote.n.length && this.tileNote.n[0].sn) {
-                                    Score = Score + this.tileNote.n.length;
-                                }
-                                else {
-                                   Score++; 
-                                }
-                            } 
+                            this.tap();
                         }
                     }
                 }
@@ -120,6 +112,38 @@ class Tile {
 
     animate(currentSpeed) {
         this.y += currentSpeed;
+    }
+
+    tap() {
+        if (this.tapped) return;
+        this.tapped = true;
+
+        if (this.tileNote.length && this.tileNote[0].sn) {
+            async function delayed(tn) {
+                let snL = tn.length;
+                let spd = currentSpeed;
+                //delay = (((1000ms/[framerate])*[tile pixel height])/[currentSpeed])/[# of notes]
+                let snD = (2500 / spd) / snL;
+
+                for (let s of tn) {
+                    DecodeNote(s.sn);
+                    await delayTimer(snD);
+                }
+            }
+            delayed(this.tileNote)
+        }
+        else {
+            DecodeNote(this.tileNote);
+        }
+
+        if(!AutoPlayEnable){
+            if (this.tileNote.length && this.tileNote[0].sn) {
+                Score = Score + this.tileNote.length;
+            }
+            else {
+               Score++; 
+            }
+        }
     }
 
     revealFail() {

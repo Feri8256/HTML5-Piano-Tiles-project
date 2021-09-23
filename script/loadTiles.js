@@ -15,12 +15,12 @@ LoadTiles = function () {
             tilePositions.push(r);
         }
 
-        tiles.push(new Tile(0, r, Notes[i], false, false, false));
+        tiles.push(new Tile(r, Notes[i]));
     }
 
     //+5 rows for ending properly
     for (let a = 0; a < 4; a++) {
-        tiles.push(new Tile(0, 0, {"n":0}, false, false, false));
+        tiles.push(new Tile(0, {"n":0}));
     }
 
     tilesLength = tiles.length;
