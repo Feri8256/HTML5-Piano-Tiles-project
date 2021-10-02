@@ -38,7 +38,6 @@ let ButtonsJSON;
 let Song;
 let tiles = [];
 let currentTile = 0;
-let Score = 0;
 let baseSpeed;
 let tilesLength;
 let currentSpeed = 0;
@@ -84,6 +83,7 @@ let SongListElements = [];
 let RewardCounterSmall;
 let RewardCounterLarge;
 let LifeDisplaySmall;
+let scoreCounter;
 let LoadMenu;
 let SongList;
 let PlayNote;
@@ -126,6 +126,7 @@ function setup() {
     RewardCounterSmall = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.GameRewardAlignX, 0, Layouts.GameRewardSizeX, Layouts.GameRewardSizeY, 36);
     RewardCounterLarge = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY, 60);
     LifeDisplaySmall = new LifeDisplay(Life, Life_faded, Layouts.GameLifeAlignX, 0, 36, 36, 36);
+    scoreCounter = new ScoreCounter(ScoreFont, Layouts.GameScoreColor, Layouts.GameScoreFontSize + 7, Layouts.GameScoreFontSize, -1.4, 200, Layouts.GameScoreMarginTop, true, 40, 200, Layouts.GameScoreMarginTop + 2);
 
     createCanvas(400,600);
     frameRate(60);
@@ -176,7 +177,7 @@ function setNewScore(id, score) {
 function ResetTiles() {
     tiles = [];
     currentTile = 0;
-    Score = 0;
+    scoreCounter.reset();
     currentSpeed = 0;
     completedLap = 0;
     FailState = false;
@@ -210,8 +211,8 @@ function RepeatSong() {
 }
 
 function RetryFromFail() {
-    if (Score > bestScore) {
-        setNewScore(Song.Title, Score);
+    if (scoreCounter.value > bestScore) {
+        setNewScore(Song.Title, scoreCounter.value);
     } 
     setTimeout(()=>{
         PauseState = true;
@@ -238,9 +239,9 @@ function SetFail(t) {
         if (t){ setTimeout(()=>{ ScreenState = 3; },2000) }
         else { setTimeout(()=>{ ScreenState = 3; },300) }
 
-        if (Score > bestScore) {
+        if (scoreCounter.value > bestScore) {
             newBest = true;
-            setNewScore(Song.Title, Score);
+            setNewScore(Song.Title, scoreCounter.value);
         }
     }
 }
@@ -261,7 +262,7 @@ function FailToMenu() {
         completedLap = 0;
         ResetReward();
         LifeDisplaySmall.reset();
-        Score = 0;
+        scoreCounter.reset();
         tiles = [];
         ScreenState = 0;
         newBest = false;
@@ -412,15 +413,7 @@ function draw() {
             }
             //Score display
             if (Options.DisplayScore) {
-                textSize(Layouts.GameScoreFontSize);
-                textAlign(CENTER);
-                textFont(ScoreFont);
-
-                fill(40);
-                text(Score, width / 2, Layouts.GameScoreMarginTop + 2);
-
-                fill(Layouts.GameScoreColor);
-                text(Score, width / 2, Layouts.GameScoreMarginTop);
+                scoreCounter.draw();
             }
            
             //Time progress bar
@@ -460,7 +453,7 @@ function draw() {
             textAlign(CENTER);
             textFont(ScoreFont);
             fill(Layouts.FailScoreLapsColor);
-            text(Score, width / 2, Layouts.FailScoreAlignY);
+            text(scoreCounter.value, width / 2, Layouts.FailScoreAlignY);
 
 
             if (newBest) {

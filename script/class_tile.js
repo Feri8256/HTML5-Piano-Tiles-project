@@ -138,10 +138,10 @@ class Tile {
 
         if(!AutoPlayEnable){
             if (this.tileNote.length && this.tileNote[0].sn) {
-                Score = Score + this.tileNote.length;
+                scoreCounter.add(this.tileNote.length);
             }
             else {
-               Score++; 
+                scoreCounter.add();
             }
         }
     }
