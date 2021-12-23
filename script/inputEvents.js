@@ -1,14 +1,14 @@
 function keyPressed() {
 
     //Press any hit key to start
-    if (HitKeys.includes(key) &&
+    /*if (HitKeys.includes(key) &&
         PauseState &&
         !FailState &&
         ScreenState === 1
     ) {
         SetSpeedAtStart();
         PauseState = false;
-    }
+    }*/
 
     if (ScreenState === 1 && !FailState) {
         for (let c = currentTile; c < currentTile + 3; c++) {
@@ -20,12 +20,14 @@ function keyPressed() {
 
         if (key === 'r') {
             if (FailState){
-                RetryFromFail();
+                retryFromFail();
             }
             else {
-                ResetReward();
-                ResetTiles();
-                PauseState = true;
+                resetReward();
+                resetTiles();
+                startingState = true;
+                tiles[0].y = 450;
+                tiles[0].startingTile = true;
             }
         }
     
@@ -47,13 +49,13 @@ function keyPressed() {
             }
         }
     
-        if (key === 'q') SetFail();
-        if (key === 'x' && FailState) FailToMenu();
+        if (key === 'q') setFail();
+        if (key === 'x' && FailState) failToMenu();
     }
 
     if (ScreenState === 3) {
-        if (key === 'x') FailToMenu();
-        if (key === 'r') RetryFromFail();
+        if (key === 'x') failToMenu();
+        if (key === 'r') retryFromFail();
     }
 }
 

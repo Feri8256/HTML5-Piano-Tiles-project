@@ -1,7 +1,7 @@
 function delayTimer(ms) {
     return new Promise(res => setTimeout(res, ms));
 }
-const tileYoffset   =   150;
+const tileYoffset = 150;
 class Tile {
 
     constructor(tilePos, tileNote) {
@@ -18,6 +18,7 @@ class Tile {
         this.tappedAlpha = 256;
         this.bonusPopupSize = 60;
         this.bonusPopupAlpha = 256;
+        this.startingTile = false;
 
         this.tilePixelPos = 0;
         switch (this.tilePos) {
@@ -41,7 +42,7 @@ class Tile {
 
     }
 
-    show() {
+    draw() {
         if (this.tileType !== 0) { //Not blank tile
             if (this.tapped) {
                 {
@@ -54,7 +55,7 @@ class Tile {
 
                 if (this.tileType === 2) {
                     textAlign(CENTER)
-                    textSize(this.bonusPopupSize < 100 ? this.bonusPopupSize += 2 : this.bonusPopupSize = 100)
+                    textSize(this.bonusPopupSize < 100 ? this.bonusPopupSize += 2 : this.bonusPopupSize = 100);
                     let bonusColor = color(80,80,200);
                     let newAlphaValue = this.bonusPopupAlpha > 10 ? this.bonusPopupAlpha -= 10 : 0;
                     bonusColor.setAlpha(newAlphaValue);
@@ -65,17 +66,17 @@ class Tile {
             else {
                 if (this.tileType === 2) fill(80,80,200);
                 else fill(200);
-                rect(this.tilePixelPos, this.y - tileYoffset, 100,150)
+                rect(this.tilePixelPos, this.y - tileYoffset, 100,150);
 
                 //Érintőképernyős bevitelt támogató rész
                 if (touchstart && !this.tapped) {
                     //Ellenörzi a azokat a pontokat, ahol a képernyő érintések történtek
-                    for (var i = 0; i < touches.length; i++) {
+                    for (var t of touches) {
                         if (
-                            touches[i].x >= this.tilePixelPos &&
-                            touches[i].x <= this.tilePixelPos + 100 &&
-                            touches[i].y >= this.y - tileYoffset &&
-                            touches[i].y <= this.y - tileYoffset + 150
+                            t.x >= this.tilePixelPos &&
+                            t.x <= this.tilePixelPos + 100 &&
+                            t.y >= this.y - tileYoffset &&
+                            t.y <= this.y - tileYoffset + 150
                         ) {
                             if (!FailState) {
                                 this.tap();
@@ -100,13 +101,20 @@ class Tile {
             }
         }
 
+        if (this.startingTile) {
+            fill(64);
+            textSize(20);
+            textAlign(CENTER)
+            text("start", this.tilePixelPos+50, this.y-120);
+        }
+
         if (this.blinksRed) {
-            fill(200,10,10)
-            rect(this.tilePixelPos, this.y - tileYoffset,100,150)
+            fill(200,10,10);
+            rect(this.tilePixelPos, this.y - tileYoffset,100,150);
         }
 
         if (this.failFired) {
-            if (this.y <= 600) currentSpeed = 0
+            if (this.y <= 600) currentSpeed = 0;
         }
     }
 
@@ -130,7 +138,7 @@ class Tile {
                     await delayTimer(snD);
                 }
             }
-            delayed(this.tileNote)
+            delayed(this.tileNote);
         }
         else {
             DecodeNote(this.tileNote);
@@ -144,22 +152,24 @@ class Tile {
                 scoreCounter.add();
             }
         }
+
+        if (this.startingTile) setSpeedAtStart();
     }
 
     revealFail() {
-        this.failFired = true
-        this.blinksRed = true
+        this.failFired = true;
+        this.blinksRed = true;
         currentSpeed =  -10;
-        const blinkDuration = 1500
-        const changeInterval = 150
+        const blinkDuration = 1500;
+        const changeInterval = 150;
 
         let blinkInterval = setInterval(()=>{
             this.blinksRed = !this.blinksRed;
         }, changeInterval);
 
         setTimeout(()=>{
-            clearInterval(blinkInterval)
-            this.blinksRed = false
+            clearInterval(blinkInterval);
+            this.blinksRed = false;
         }, blinkDuration);
     }
 }

@@ -2,6 +2,8 @@ console.log("%cWelcome to\n%cp5 Tiles", "font-size: 16pt", "font-size: 20pt; fon
 const songsBaseURL = "assets/res/songs/"
 const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
+const PianoSounds = "piano/";
+const SfxSounds = "sfx/";
 const HitLineOffset = 370; 
 const HitWindowAddHeight = 80;
 const HitKeys = ["d","f","j","k"];
@@ -45,7 +47,7 @@ let completedLap = 0;
 let DisplayInfo = false;
 let AutoPlayEnable = false;
 let FailState = false;
-let PauseState = true;
+let startingState = true;
 let Lifes = 3;
 let bestScore = 0;
 let newBest = false;
@@ -84,10 +86,10 @@ let RewardCounterSmall;
 let RewardCounterLarge;
 let LifeDisplaySmall;
 let scoreCounter;
-let LoadMenu;
+let loadMenu;
 let SongList;
 let PlayNote;
-let LoadTiles;
+let loadTiles;
 let canvasElement;
 
 let bodyWidth = 0;
@@ -119,10 +121,10 @@ function setup() {
     CheckBoxHighQuality = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 375, 40, 40, Options.HighQuality, function(r){Options.HighQuality = r}, 250);
     MenuArrowDownButton = new uiIconButton(Button_down, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY, Layouts.MenuArrowDownSizeX, Layouts.MenuArrowDownSizeY, function(){MenuPageNumber++}, 100);
     MenuArrowUpButton = new uiIconButton(Button_up, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY, Layouts.MenuArrowUpSizeX, Layouts.MenuArrowUpSizeY, function(){MenuPageNumber--}, 100);
-    MenuButton = new uiIconButton(Button_menu, Layouts.FailBtnMenuAlignX, Layouts.FailBtnMenuAlignY, Layouts.FailBtnMenuSizeX, Layouts.FailBtnMenuSizeY, FailToMenu, 250);
-    RetryButton = new uiIconButton(Button_retry, Layouts.FailBtnRetryAlignX, Layouts.FailBtnRetryAlignY, Layouts.FailBtnRetrySizeX, Layouts.FailBtnRetrySizeY, RetryFromFail, 250);
-    SettingsButton = new uiIconButton(Button_settings, Layouts.SettingsBtnAlignX, Layouts.SettingsBtnAlignY, Layouts.SettingsBtnSizeX, Layouts.SettingsBtnSizeY, MenuToSettings, 250);
-    SettingsBackButton = new uiIconButton(Button_back, Layouts.SettingsBackAlignX, Layouts.SettingsBackAlignY, Layouts.SettingsBackSizeX, Layouts.SettingsBackSizeY, SettingsToMenu, 250);
+    MenuButton = new uiIconButton(Button_menu, Layouts.FailBtnMenuAlignX, Layouts.FailBtnMenuAlignY, Layouts.FailBtnMenuSizeX, Layouts.FailBtnMenuSizeY, failToMenu, 250);
+    RetryButton = new uiIconButton(Button_retry, Layouts.FailBtnRetryAlignX, Layouts.FailBtnRetryAlignY, Layouts.FailBtnRetrySizeX, Layouts.FailBtnRetrySizeY, retryFromFail, 250);
+    SettingsButton = new uiIconButton(Button_settings, Layouts.SettingsBtnAlignX, Layouts.SettingsBtnAlignY, Layouts.SettingsBtnSizeX, Layouts.SettingsBtnSizeY, menuToSettings, 250);
+    SettingsBackButton = new uiIconButton(Button_back, Layouts.SettingsBackAlignX, Layouts.SettingsBackAlignY, Layouts.SettingsBackSizeX, Layouts.SettingsBackSizeY, settingsToMenu, 250);
     RewardCounterSmall = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.GameRewardAlignX, 0, Layouts.GameRewardSizeX, Layouts.GameRewardSizeY, 36);
     RewardCounterLarge = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY, 60);
     LifeDisplaySmall = new LifeDisplay(Life, Life_faded, Layouts.GameLifeAlignX, 0, 36, 36, 36);
@@ -132,7 +134,7 @@ function setup() {
     frameRate(60);
     if (!Options.HighQuality) pixelDensity(1);
     noStroke();
-    LoadMenu();
+    loadMenu();
 
     canvasElement = document.querySelector('.p5Canvas');
     canvasElement.removeAttribute('style');
@@ -174,7 +176,7 @@ function setNewScore(id, score) {
     localStorage.setItem(id, score.toString());
 }
 
-function ResetTiles() {
+function resetTiles() {
     tiles = [];
     currentTile = 0;
     scoreCounter.reset();
@@ -182,55 +184,58 @@ function ResetTiles() {
     completedLap = 0;
     FailState = false;
     LifeDisplaySmall.reset();
-    LoadTiles();
+    loadTiles();
 }
 
-function SetSpeedAtStart() {
+function setSpeedAtStart() {
     currentSpeed = Song.baseSpeed;
+    startingState = false;
 }
 
-function AddSpeed() {
+function addSpeed() {
     currentSpeed = currentSpeed + Song.speedIncrement;
 }
 
-function CalcReward() {
+function calcReward() {
     RewardCounterSmall.countUp();
     RewardCounterLarge.countUp();
 }
 
-function ResetReward() {
+function resetReward() {
     RewardCounterSmall.reset();
     RewardCounterLarge.reset();
 }
 
-function RepeatSong() {
+function repeatSong() {
     completedLap++;
     tiles = [];
     currentTile = 0;
-    LoadTiles();
+    loadTiles();
 }
 
-function RetryFromFail() {
+function retryFromFail() {
     if (scoreCounter.value > bestScore) {
         setNewScore(Song.Title, scoreCounter.value);
-    } 
+    }
     setTimeout(()=>{
-        PauseState = true;
+        startingState = true;
         ScreenState = 1;
-        ResetTiles();
-        ResetReward();
+        resetTiles();
+        resetReward();
         bestScore = getBestScore(Song.Title);
         newBest = false;
         AutoPlayEnable = false;
+        tiles[0].y = 450;
+        tiles[0].startingTile = true;
     },500);
 }
 
-function ReduceLife(t) {
+function reduceLife(t) {
     LifeDisplaySmall.countDown();
-    if (LifeDisplaySmall.counter === 0) SetFail(t);
+    if (LifeDisplaySmall.counter === 0) setFail(t);
 }
 
-function SetFail(t) {
+function setFail(t) {
     if (FailState === false && ScreenState === 1) {
         FailState = true;
         if (t) t.revealFail()
@@ -247,20 +252,23 @@ function SetFail(t) {
 }
 
 //Change screens
-function MenuToGame() {
+function menuToGame() {
+    tiles[0].y = 450;
+    tiles[0].startingTile = true;
     setTimeout(()=>{
         ScreenState = 1;
+        startingState = true;
     },500);
 }
 
-function FailToMenu() {
+function failToMenu() {
     FailState = false;
     setTimeout(()=>{
         Song = null;
         currentTile = 0;
         currentSpeed = 0;
         completedLap = 0;
-        ResetReward();
+        resetReward();
         LifeDisplaySmall.reset();
         scoreCounter.reset();
         tiles = [];
@@ -270,13 +278,13 @@ function FailToMenu() {
     },300);
 }
 
-function MenuToSettings() {
+function menuToSettings() {
     setTimeout(()=>{
         ScreenState = 4;
     },300)
 }
 
-function SettingsToMenu() {
+function settingsToMenu() {
     localStorage.setItem("userOptions", JSON.stringify(Options))
     setTimeout(()=>{
         ScreenState = 0;
@@ -293,7 +301,7 @@ function draw() {
             background(16);
             textFont(ScoreFont);
             for (var i = MenuPageNumber; i < MenuPageNumber+5; i++) {
-                SongListElements[i]?.show(MenuElementsYPosition);
+                SongListElements[i]?.draw(MenuElementsYPosition);
                 MenuElementsYPosition += Layouts.MenuCardHeight + 20;
                 if (MenuElementsYPosition === 120 * 5) MenuElementsYPosition = 0;
             }
@@ -314,15 +322,6 @@ function draw() {
 
         //Game
         case 1:
-            if (
-                mouseIsPressed && 
-                !FailState &&
-                PauseState
-            ) {
-                SetSpeedAtStart();
-                PauseState = false;
-            }
-
             image(GameBg, width / 2 - 200, 0,400,bodyHeight);
             //three vertical lines
             {
@@ -332,7 +331,39 @@ function draw() {
                 rect(299,0,2,600);
             }
     
-            if (PauseState) {
+            for (let i = currentTile; i < currentTile + TilesOnScreen; i++) {
+                if (tiles[i+1]) tiles[i+1].y = tiles[i]?.y - NextTileAfter
+
+                tiles[i]?.draw();
+                tiles[i]?.animate(currentSpeed);
+
+                if (AutoPlayEnable && tiles[i]?.y > HitLineOffset && !tiles[i].tapped) {
+                    tiles[i].tap();
+                }
+
+                if (!tiles[i].commandCheck) {
+                    if (tiles[i].tileNoteObject.a) addSpeed();
+                    if (tiles[i].tileNoteObject.b && completedLap === 0) calcReward();
+                    tiles[i].commandCheck = true;
+                }
+
+                if (currentTile === tilesLength - 5) {
+                    calcReward();
+                    repeatSong();
+                }
+
+                if (tiles[i]?.y > NextTileAfter * 5) {
+                    if (!tiles[i].tapped && tiles[i].tileType !== 0 && !tiles[i].failCheck) reduceLife(tiles[i])
+                    tiles[i].failCheck = true;
+                }
+
+                if (tiles[i]?.y > NextTileAfter * 6) currentTile++
+            }
+    
+            //Red line
+            if (isItDesktopScreen) image(GameHitLine, width / 2 - 200, HitLineOffset + 105);
+
+            if (startingState) {
                 textSize(Layouts.GameStartTextFontSize);
                 textAlign(CENTER);
                 fill(Layouts.GameStartTextColor);
@@ -342,48 +373,13 @@ function draw() {
                     text(HitKeys[2], 250, Layouts.GameStartTextAlignY);
                     text(HitKeys[3], 350, Layouts.GameStartTextAlignY);
                 }
-                else {
-                    text("Tap to start", 200, Layouts.GameStartTextAlignY);
-                }
 
-                fill(200)
-                textAlign(LEFT)
-                textSize(22)
+                fill(200);
+                textAlign(LEFT);
+                textSize(22);
                 text("Song: "+Song.Title, 0, 550)
                 text("Best score: "+bestScore, 0, 580)
             }
-    
-            for (let i = currentTile; i < currentTile + TilesOnScreen; i++) {
-                if (tiles[i+1]) tiles[i+1].y = tiles[i]?.y - NextTileAfter
-
-                tiles[i]?.show();
-                tiles[i]?.animate(currentSpeed);
-
-                if (AutoPlayEnable && tiles[i]?.y > HitLineOffset && !tiles[i].tapped) {
-                    tiles[i].tap();
-                }
-
-                if (!tiles[i].commandCheck) {
-                    if (tiles[i].tileNoteObject.a) AddSpeed();
-                    if (tiles[i].tileNoteObject.b && completedLap === 0) CalcReward();
-                    tiles[i].commandCheck = true;
-                }
-
-                if (currentTile === tilesLength - 5) {
-                    CalcReward();
-                    RepeatSong();
-                }
-
-                if (tiles[i]?.y > NextTileAfter * 5) {
-                    if (!tiles[i].tapped && tiles[i].tileType !== 0 && !tiles[i].failCheck) ReduceLife(tiles[i])
-                    tiles[i].failCheck = true;
-                }
-
-                if (tiles[i]?.y > NextTileAfter * 6) currentTile++
-            }
-    
-            //Red line
-            if (isItDesktopScreen) image(GameHitLine, width / 2 - 200, HitLineOffset + 105);
     
             //Info display
             if (Options.DisplayInfo) {
@@ -397,12 +393,12 @@ function draw() {
     
             //Reward display
             if (Options.DisplayRewards) {
-                RewardCounterSmall.show();
+                RewardCounterSmall.draw();
             }
             
             //Life display
             if (Options.DisplayLifes) {
-                LifeDisplaySmall.show();
+                LifeDisplaySmall.draw();
             }
 
             if (AutoPlayEnable) {
@@ -462,7 +458,7 @@ function draw() {
             }
 
             //Reward display on the results screen
-            RewardCounterLarge.show();
+            RewardCounterLarge.draw();
     
             //Menu button
             MenuButton.draw();

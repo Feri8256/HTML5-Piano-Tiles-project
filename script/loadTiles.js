@@ -1,4 +1,4 @@
-LoadTiles = function () {
+loadTiles = function () {
     let tilePositions = [];
     let {Notes} = Song;
 

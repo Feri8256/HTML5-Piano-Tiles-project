@@ -10,7 +10,7 @@ class LifeDisplay {
         this.counter = 3;
     }
 
-    show() {
+    draw() {
         let alignX = this.posX;
         for (let i=1; i<4; i++) {
             

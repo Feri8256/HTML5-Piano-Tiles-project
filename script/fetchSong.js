@@ -4,7 +4,7 @@ function FetchSong(filename) {
     fetch(songsBaseURL+filename)
         .then(response => response.json())
         .then(data => SongLoaderV2(data))
-        .then(data => LoadTiles())
+        .then(data => loadTiles())
         .then(data => PauseState = true)
-        .then(data => MenuToGame())
+        .then(data => menuToGame())
 }

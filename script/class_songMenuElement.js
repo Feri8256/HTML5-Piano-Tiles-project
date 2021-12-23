@@ -5,7 +5,7 @@ class SongMenuElement {
         this.indexNumber = indexNumber;
     }
 
-    show(MenuElementsYPosition) {
+    draw(MenuElementsYPosition) {
         push()
 
         if (
