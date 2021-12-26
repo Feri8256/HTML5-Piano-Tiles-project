@@ -18,6 +18,8 @@ function keyPressed() {
             }
         }
 
+        if (key === 'Escape') handleGamePause('hidden');
+
         if (key === 'r') {
             if (FailState){
                 retryFromFail();
@@ -82,3 +84,8 @@ function mouseWheel(event) {
     }
     return false;
 }
+
+window.addEventListener('visibilitychange', (evt) => {
+    let s = evt.target.visibilityState;
+    handleGamePause(s);
+});

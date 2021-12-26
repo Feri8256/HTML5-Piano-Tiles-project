@@ -4,12 +4,12 @@ const ImgBaseUrl = "assets/res/images/";
 const SndBaseUrl = "assets/res/sounds/";
 const PianoSounds = "piano/";
 const SfxSounds = "sfx/";
-const HitLineOffset = 370; 
+const HitLineOffset = 370;
 const HitWindowAddHeight = 80;
-const HitKeys = ["d","f","j","k"];
-const NextTileAfter =   150;
-const TilesOnScreen = 6
-const FailSound = [48,52,55];
+const HitKeys = ["d", "f", "j", "k"];
+const NextTileAfter = 150;
+const TilesOnScreen = 6;
+const FailSound = [48, 52, 55];
 
 /**
  * Contains properties of ui elements
@@ -43,6 +43,7 @@ let currentTile = 0;
 let baseSpeed;
 let tilesLength;
 let currentSpeed = 0;
+let speedAtPause = 0;
 let completedLap = 0;
 let DisplayInfo = false;
 let AutoPlayEnable = false;
@@ -112,25 +113,25 @@ function setup() {
         this[ButtonsJSON[i].name] = Buttons.get(ButtonsJSON[i].x, ButtonsJSON[i].y, ButtonsJSON[i].w, ButtonsJSON[i].h);
     }
 
-    CheckBoxScore = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 15, 40, 40, Options.DisplayScore, function(r){Options.DisplayScore = r}, 250);
-    CheckBoxLifes = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 75, 40, 40, Options.DisplayLifes, function(r){Options.DisplayLifes = r}, 250);
-    CheckBoxRewards = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 135, 40, 40, Options.DisplayRewards, function(r){Options.DisplayRewards = r}, 250);
-    CheckBoxTimeProgressBar = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 195, 40, 40, Options.DisplayTimeProgress, function(r){Options.DisplayTimeProgress = r}, 250);
-    CheckBoxFailSound = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 255, 40, 40, Options.PlayFailSound, function(r){Options.PlayFailSound = r}, 250);
-    CheckBoxDisplayInfo = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 315, 40, 40, Options.DisplayInfo, function(r){Options.DisplayInfo = r}, 250);
-    CheckBoxHighQuality = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 375, 40, 40, Options.HighQuality, function(r){Options.HighQuality = r}, 250);
-    MenuArrowDownButton = new uiIconButton(Button_down, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY, Layouts.MenuArrowDownSizeX, Layouts.MenuArrowDownSizeY, function(){MenuPageNumber++}, 100);
-    MenuArrowUpButton = new uiIconButton(Button_up, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY, Layouts.MenuArrowUpSizeX, Layouts.MenuArrowUpSizeY, function(){MenuPageNumber--}, 100);
+    CheckBoxScore = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 15, 40, 40, Options.DisplayScore, function (r) { Options.DisplayScore = r }, 250);
+    CheckBoxLifes = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 75, 40, 40, Options.DisplayLifes, function (r) { Options.DisplayLifes = r }, 250);
+    CheckBoxRewards = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 135, 40, 40, Options.DisplayRewards, function (r) { Options.DisplayRewards = r }, 250);
+    CheckBoxTimeProgressBar = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 195, 40, 40, Options.DisplayTimeProgress, function (r) { Options.DisplayTimeProgress = r }, 250);
+    CheckBoxFailSound = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 255, 40, 40, Options.PlayFailSound, function (r) { Options.PlayFailSound = r }, 250);
+    CheckBoxDisplayInfo = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 315, 40, 40, Options.DisplayInfo, function (r) { Options.DisplayInfo = r }, 250);
+    CheckBoxHighQuality = new uiCheckbox(Checkbox_base, Checkbox_mark, Layouts.SettingsOptionButtonsAlignX, 375, 40, 40, Options.HighQuality, function (r) { Options.HighQuality = r }, 250);
+    MenuArrowDownButton = new uiIconButton(Button_down, Layouts.MenuArrowDownAlignX, Layouts.MenuArrowDownAlignY, Layouts.MenuArrowDownSizeX, Layouts.MenuArrowDownSizeY, function () { MenuPageNumber++ }, 100);
+    MenuArrowUpButton = new uiIconButton(Button_up, Layouts.MenuArrowUpAlignX, Layouts.MenuArrowUpAlignY, Layouts.MenuArrowUpSizeX, Layouts.MenuArrowUpSizeY, function () { MenuPageNumber-- }, 100);
     MenuButton = new uiIconButton(Button_menu, Layouts.FailBtnMenuAlignX, Layouts.FailBtnMenuAlignY, Layouts.FailBtnMenuSizeX, Layouts.FailBtnMenuSizeY, failToMenu, 250);
     RetryButton = new uiIconButton(Button_retry, Layouts.FailBtnRetryAlignX, Layouts.FailBtnRetryAlignY, Layouts.FailBtnRetrySizeX, Layouts.FailBtnRetrySizeY, retryFromFail, 250);
     SettingsButton = new uiIconButton(Button_settings, Layouts.SettingsBtnAlignX, Layouts.SettingsBtnAlignY, Layouts.SettingsBtnSizeX, Layouts.SettingsBtnSizeY, menuToSettings, 250);
     SettingsBackButton = new uiIconButton(Button_back, Layouts.SettingsBackAlignX, Layouts.SettingsBackAlignY, Layouts.SettingsBackSizeX, Layouts.SettingsBackSizeY, settingsToMenu, 250);
     RewardCounterSmall = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.GameRewardAlignX, 0, Layouts.GameRewardSizeX, Layouts.GameRewardSizeY, 36);
-    RewardCounterLarge = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX,Layouts.FailRewardSizeY, 60);
+    RewardCounterLarge = new RewardCounter(Star, Star_faded, Crown, Crown_faded, Glare, Layouts.FailRewardAlignX, Layouts.FailRewardAlignY, Layouts.FailRewardSizeX, Layouts.FailRewardSizeY, 60);
     LifeDisplaySmall = new LifeDisplay(Life, Life_faded, Layouts.GameLifeAlignX, 0, 36, 36, 36);
     scoreCounter = new ScoreCounter(ScoreFont, Layouts.GameScoreColor, Layouts.GameScoreFontSize + 7, Layouts.GameScoreFontSize, -1.4, 200, Layouts.GameScoreMarginTop, true, 40, 200, Layouts.GameScoreMarginTop + 2);
 
-    createCanvas(400,600);
+    createCanvas(400, 600);
     frameRate(60);
     if (!Options.HighQuality) pixelDensity(1);
     noStroke();
@@ -162,7 +163,7 @@ function windowResized() {
     }
 }
 
-function getBestScore(id){
+function getBestScore(id) {
     let testRead = localStorage.getItem(id);
     let output = parseInt(testRead);
 
@@ -217,7 +218,7 @@ function retryFromFail() {
     if (scoreCounter.value > bestScore) {
         setNewScore(Song.Title, scoreCounter.value);
     }
-    setTimeout(()=>{
+    setTimeout(() => {
         startingState = true;
         ScreenState = 1;
         resetTiles();
@@ -227,7 +228,7 @@ function retryFromFail() {
         AutoPlayEnable = false;
         tiles[0].y = 450;
         tiles[0].startingTile = true;
-    },500);
+    }, 500);
 }
 
 function reduceLife(t) {
@@ -238,11 +239,11 @@ function reduceLife(t) {
 function setFail(t) {
     if (FailState === false && ScreenState === 1) {
         FailState = true;
-        if (t) t.revealFail()
+        if (t) t.revealFail();
         if (t && Options.PlayFailSound) DecodeNote(FailSound);
 
-        if (t){ setTimeout(()=>{ ScreenState = 3; },2000) }
-        else { setTimeout(()=>{ ScreenState = 3; },300) }
+        if (t) { setTimeout(() => { ScreenState = 3; }, 2000) }
+        else { setTimeout(() => { ScreenState = 3; }, 300) }
 
         if (scoreCounter.value > bestScore) {
             newBest = true;
@@ -251,19 +252,35 @@ function setFail(t) {
     }
 }
 
+function handleGamePause(state) {
+    if (state === 'hidden' && ScreenState === 1) {
+        speedAtPause = currentSpeed;
+        currentSpeed = 0;
+        baseSpeed = speedAtPause;
+        for (let i = currentTile; i < currentTile + TilesOnScreen; i++) {
+            if (!tiles[i].tapped && tiles[i].tileType !== 0) {
+                tiles[i].startingTile = true;
+                if (tiles[i].y < 150) tiles[currentTile].y += 150;
+                if (tiles[i].y > 550) tiles[currentTile].y -= 150;
+                break;
+            }
+        }
+    }
+}
+
 //Change screens
 function menuToGame() {
     tiles[0].y = 450;
     tiles[0].startingTile = true;
-    setTimeout(()=>{
+    setTimeout(() => {
         ScreenState = 1;
         startingState = true;
-    },500);
+    }, 500);
 }
 
 function failToMenu() {
     FailState = false;
-    setTimeout(()=>{
+    setTimeout(() => {
         Song = null;
         currentTile = 0;
         currentSpeed = 0;
@@ -275,20 +292,20 @@ function failToMenu() {
         ScreenState = 0;
         newBest = false;
         AutoPlayEnable = false;
-    },300);
+    }, 300);
 }
 
 function menuToSettings() {
-    setTimeout(()=>{
+    setTimeout(() => {
         ScreenState = 4;
-    },300)
+    }, 300);
 }
 
 function settingsToMenu() {
-    localStorage.setItem("userOptions", JSON.stringify(Options))
-    setTimeout(()=>{
+    localStorage.setItem("userOptions", JSON.stringify(Options));
+    setTimeout(() => {
         ScreenState = 0;
-    },300)
+    }, 300);
 }
 
 //Main draw loop
@@ -300,39 +317,39 @@ function draw() {
         case 0:
             background(16);
             textFont(ScoreFont);
-            for (var i = MenuPageNumber; i < MenuPageNumber+5; i++) {
+            for (var i = MenuPageNumber; i < MenuPageNumber + 5; i++) {
                 SongListElements[i]?.draw(MenuElementsYPosition);
                 MenuElementsYPosition += Layouts.MenuCardHeight + 20;
                 if (MenuElementsYPosition === 120 * 5) MenuElementsYPosition = 0;
             }
-    
+
             if (!isItDesktopScreen) {
                 if (MenuPageNumber != 0) {
                     MenuArrowUpButton.draw();
                 }
-                
+
                 if (MenuPageNumber < SongListElements.length - 4) {
                     MenuArrowDownButton.draw();
                 }
             }
 
-            SettingsButton.draw()
+            SettingsButton.draw();
 
             break;
 
         //Game
         case 1:
-            image(GameBg, width / 2 - 200, 0,400,bodyHeight);
+            image(GameBg, width / 2 - 200, 0, 400, bodyHeight);
             //three vertical lines
             {
                 fill(50);
-                rect(99,0,2,600);
-                rect(199,0,2,600);
-                rect(299,0,2,600);
+                rect(99, 0, 2, 600);
+                rect(199, 0, 2, 600);
+                rect(299, 0, 2, 600);
             }
-    
+
             for (let i = currentTile; i < currentTile + TilesOnScreen; i++) {
-                if (tiles[i+1]) tiles[i+1].y = tiles[i]?.y - NextTileAfter
+                if (tiles[i + 1]) tiles[i + 1].y = tiles[i]?.y - NextTileAfter;
 
                 tiles[i]?.draw();
                 tiles[i]?.animate(currentSpeed);
@@ -353,13 +370,13 @@ function draw() {
                 }
 
                 if (tiles[i]?.y > NextTileAfter * 5) {
-                    if (!tiles[i].tapped && tiles[i].tileType !== 0 && !tiles[i].failCheck) reduceLife(tiles[i])
+                    if (!tiles[i].tapped && tiles[i].tileType !== 0 && !tiles[i].failCheck) reduceLife(tiles[i]);
                     tiles[i].failCheck = true;
                 }
 
-                if (tiles[i]?.y > NextTileAfter * 6) currentTile++
+                if (tiles[i]?.y > NextTileAfter * 6) currentTile++;
             }
-    
+
             //Red line
             if (isItDesktopScreen) image(GameHitLine, width / 2 - 200, HitLineOffset + 105);
 
@@ -377,25 +394,25 @@ function draw() {
                 fill(200);
                 textAlign(LEFT);
                 textSize(22);
-                text("Song: "+Song.Title, 0, 550)
-                text("Best score: "+bestScore, 0, 580)
+                text("Song: " + Song.Title, 0, 550);
+                text("Best score: " + bestScore, 0, 580);
             }
-    
+
             //Info display
             if (Options.DisplayInfo) {
                 textSize(15);
                 textAlign(LEFT);
                 fill(210, 170, 100);
-                text("speed: "+currentSpeed+" px/frame", 0, 10);
-                text("tile: "+currentTile+"/"+tilesLength, 0, 25);
-                text("lap: "+completedLap, 0, 40);
+                text("speed: " + currentSpeed + " px/frame", 0, 10);
+                text("tile: " + currentTile + "/" + tilesLength, 0, 25);
+                text("lap: " + completedLap, 0, 40);
             }
-    
+
             //Reward display
             if (Options.DisplayRewards) {
                 RewardCounterSmall.draw();
             }
-            
+
             //Life display
             if (Options.DisplayLifes) {
                 LifeDisplaySmall.draw();
@@ -405,20 +422,20 @@ function draw() {
                 textSize(Layouts.GameAutoPlayTextFontSize);
                 fill(Layouts.GameAutoPlayTextColor);
                 textAlign(CENTER);
-                text("Autoplay enabled", width/2, Layouts.GameAutoPlayTextMarginTop);
+                text("Autoplay enabled", width / 2, Layouts.GameAutoPlayTextMarginTop);
             }
             //Score display
             if (Options.DisplayScore) {
                 scoreCounter.draw();
             }
-           
+
             //Time progress bar
             if (Options.DisplayTimeProgress) {
-                let lineWidth = map(currentTile, 0, tilesLength-5, 0, width);
-                fill(Layouts.GameTimeProgressBarColor)
-                rect(0,0, lineWidth,3)
+                let lineWidth = map(currentTile, 0, tilesLength - 5, 0, width);
+                fill(Layouts.GameTimeProgressBarColor);
+                rect(0, 0, lineWidth, 3);
             }
-           
+
             break;
 
         //Loading
@@ -439,12 +456,12 @@ function draw() {
             textAlign(CENTER);
             textFont(ScoreFont);
             fill(Layouts.FailTextColor);
-    
+
             textSize(Layouts.FailTextTitleFontSize);
             textFont(ScoreFont);
             fill(Layouts.FailTextTitleColor);
             text(Song.Title, width / 2, Layouts.FailTextTitleAlignY);
-    
+
             textSize(Layouts.FailScoreFontSize);
             textAlign(CENTER);
             textFont(ScoreFont);
@@ -459,42 +476,42 @@ function draw() {
 
             //Reward display on the results screen
             RewardCounterLarge.draw();
-    
+
             //Menu button
             MenuButton.draw();
-    
+
             //Retry button
             RetryButton.draw();
             break;
 
         //Settings
         case 4:
-            background(16)
-            textAlign(LEFT)
-            textSize(Layouts.SettingsOptionFontSize)
-            fill(160)
-            text('Display score', 20, 40)
-            CheckBoxScore.draw()
+            background(16);
+            textAlign(LEFT);
+            textSize(Layouts.SettingsOptionFontSize);
+            fill(160);
+            text('Display score', 20, 40);
+            CheckBoxScore.draw();
 
-            text('Display lifes', 20, 100)
-            CheckBoxLifes.draw()
+            text('Display lifes', 20, 100);
+            CheckBoxLifes.draw();
 
-            text('Display rewards', 20, 160)
-            CheckBoxRewards.draw()
+            text('Display rewards', 20, 160);
+            CheckBoxRewards.draw();
 
-            text('Display time progress', 20, 220)
-            CheckBoxTimeProgressBar.draw()
+            text('Display time progress', 20, 220);
+            CheckBoxTimeProgressBar.draw();
 
-            text('Play fail sound', 20, 280)
-            CheckBoxFailSound.draw()
+            text('Play fail sound', 20, 280);
+            CheckBoxFailSound.draw();
 
-            text('Display info', 20, 340)
-            CheckBoxDisplayInfo.draw()
+            text('Display info', 20, 340);
+            CheckBoxDisplayInfo.draw();
 
-            text('High quality (reload)', 20, 400)
-            CheckBoxHighQuality.draw()
+            text('High quality (reload)', 20, 400);
+            CheckBoxHighQuality.draw();
 
-            SettingsBackButton.draw()
+            SettingsBackButton.draw();
             break;
     }
 }
