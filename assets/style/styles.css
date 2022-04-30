@@ -1,41 +1,48 @@
-body {
-    margin: 0;
-    background-color: black;
-    min-width: 400px;
-    min-height: 600px;
+@font-face {
+    font-family: futura;
+    src: url("../res/fonts/Futura_condensed.ttf");
 }
 
-#p5_loading {
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: futura;
+}
+
+body {
+    background-image: linear-gradient(rgb(0, 162, 226), rgb(0, 94, 148));
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#loading {
     position: absolute;
-    width: 96px;
     transform: translate(-50%,-50%);
     top: 50%;
     left: 50%;
 }
 
-#p5_loading img {
-    animation-name: loadingAnimation;
-    animation-duration: 1s;
-    animation-timing-function: linear;
-
-    -webkit-animation-name: loadingAnimation;
-    -webkit-animation-duration: 1s;
-    -webkit-animation-timing-function: linear;
+#loading img {
+    width: 64px;
+    -webkit-animation: loadingAnimation 1s linear infinite;
+    animation: loadingAnimation 1s linear infinite;
 }
 
 main {
-    display: flex;
-    justify-content: center;
+    position: relative;
+    min-width: 400px;
+    min-height: 600px;
 }
 
-.desktop {
-    position: absolute;
-    height: -webkit-fill-available;
-}
-
-.mobile {
-    position: absolute;
-    width: -webkit-fill-available;
+@-webkit-keyframes loadingAnimation {
+    0% { 
+        -webkit-transform: rotate(0deg);
+    }
+    100% { 
+        -webkit-transformtransform: rotate(360deg);
+    }
 }
 
 @keyframes loadingAnimation {
@@ -47,11 +54,177 @@ main {
     }
 }
 
-@-webkit-keyframes loadingAnimation {
-    0% { 
-        -webkit-transform: rotate(0deg);
-    }
-    100% { 
-        -webkit-transformtransform: rotate(360deg);
-    }
+.menucard {
+    background-color: white; 
+    border-radius: 15px;
+    box-shadow: 0px 3px 3px;
+    display: flex;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
+
+.menucard .cardleft {
+    flex: 2;
+    background-color: rgb(255, 153, 0);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.menucard .num {
+    font-size: 20pt;
+    color: white;
+    margin-top: 10%;
+    margin-left: 10%;
+    
+}
+
+.menucard .title-and-performer {
+    flex: 10;
+    margin-left: 10px;
+}
+
+.menucard .title-and-performer .title {
+    margin-top: 2%;
+    font-size: 20pt;
+}
+
+.menucard .title-and-performer .performer {
+    font-size: 15pt;
+    color: gray;
+}
+
+.menucard .title-and-performer .play-btn {
+    background-color: rgb(0, 186, 219);
+    color: white;
+    border-radius: 15px;
+    border: none;
+    font-size: 20pt;
+    width: 100px;
+    margin-bottom: 2%;
+}
+
+.listend {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 20pt;
+    color: white;
+    text-shadow: 0px 2px black;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+canvas {
+    background-image: linear-gradient(rgb(0, 162, 226), rgb(0, 94, 148));
+    top: 0;
+    position: absolute;
+}
+
+#nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    height: 30px;
+}
+
+li {
+    flex: 1;
+    display: inline;
+    text-align: center;
+    font-size: 16pt;
+    color: white;
+    cursor: pointer;
+    background-color: rgb(0, 130, 182);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 0px 0px 5px;
+}
+
+li.active {
+    background-color: white;
+    color: black;
+    transform: scale(1.1);
+    transition: ease-in 250ms;
+}
+
+#stars img, #crowns img {
+    pointer-events: none;
+    position: absolute;
+    margin: auto;
+    width: 64px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 1;
+}
+
+.labels-inputs {
+    background-color: rgba(200, 200, 200, 0.8);
+    margin-left: 50px;
+    margin-right: 50px;
+    display: flex;
+    justify-content: end;
+}
+
+label {
+    flex: 1;
+    font-size: 16pt;
+}
+
+input {
+    flex: 1;
+}
+
+#end {
+    height: 100%;
+    min-height: 100%;
+}
+
+.area {
+    position: fixed;
+    width: 100%;
+}
+
+#end-buttons {
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+#end-buttons button {
+    background-color: rgba(0, 195, 255, 0.658);
+    border: 2px solid rgb(201, 201, 201);
+    border-radius: 48px;
+    width: 120px;
+}
+
+#end-buttons button img {
+    width: 72px;
+}
+
+#songtitle {
+    color: rgb(255, 255, 255);
+    
+    top: 50px;
+    text-align: center;
+    font-size: 16pt;
+}
+
+#score {
+    color: white;
+    text-shadow: 0px 2px black;
+    text-align: center;
+    height: 30%;
+    font-size: 64pt;
+    top: 30%;
+}
+

@@ -1,42 +1,77 @@
 <!doctype html>
-<html prefix="og: https://ogp.me/ns#">
-    <head>
-        <meta charset="UTF-8">
-        <meta property="og:url" content="https://html5-piano-tiles.glitch.me/">
-        <meta property="og:title" content="Play Piano Tiles in your browser!">
-        <meta property="og:description" content="A dark-themed Piano Tiles clone running in a browser, simplified in function and appearance, which essentially tries to resemble the original application. Try it out! :)">
-        <meta property="og:type" content="website">
-        <meta property="og:image" content="https://html5-piano-tiles.glitch.me/assets/res/images/icon.png">
-        <meta property="og:image:type" content="image/png">
-        <meta name="viewport" content="width=device-width, user-scalable=no">
-        <link rel="stylesheet" type="text/css" href="assets/style/styles.css">
-        <link rel="icon" type="image/png" href="assets/res/images/icon.png">
-        <title>p5 tiles</title>
-    </head>
-    <body>
+<html lang="en">
 
-        <div id="p5_loading">
-            <img src="assets/res/images/loading.png" alt="loading...">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="assets/style/styles.css">
+    <link rel="icon" type="image/png" href="assets/res/images/icon.png">
+    <title>asd</title>
+</head>
+
+<body>
+    <div id="loading">
+        <img src="assets/res/images/loading.png" alt="loading..." text="loading...">
+    </div>
+
+    <main>
+        <div id="home" style="display:none;">
+            <h1>home?</h1>
         </div>
 
-        <script src="lib/p5.min.js"></script>
-        <script src="script/AudioLoaderAndPlayerThing.js"></script>
+        <div id="songlist" style="display:none;"></div>
 
-        <script src="script/class_uiCheckbox.js"></script>
-        <script src="script/class_songMenuElement.js"></script>
-        <script src="script/class_lifeDisplay.js"></script>
-        <script src="script/class_uiIconButton.js"></script>
-        <script src="script/class_rewardCounter.js"></script>
-        <script src="script/class_tile.js"></script>
-        <script src="script/class_scoreCounter.js"></script>
-        <script src="script/main.js"></script>
-        <script src="script/playNote.js"></script>
-        <script src="script/resourcePreload.js"></script>
-        <script src="script/inputEvents.js"></script>
-        <script src="script/songLoaderV2.js"></script>
-        <script src="script/decodeNote.js"></script>
-        <script src="script/fetchSong.js"></script>
-        <script src="script/loadTiles.js"></script>
-        <script src="script/loadMenu.js"></script>
-    </body>
+        <div id="favorites" style="display:none;"></div>
+
+        <div id="settings" style="display:none;">
+
+            <h1>Audio</h1>
+            <div class="labels-inputs">
+                <label for="vol">Volume</label>
+                <input type="range" name="volume" id="vol" min="0" max="100" value="100">
+            </div>
+        </div>
+
+        <ul id="nav" style="display:none;">
+            <li class="nav-btn active" data-id="0">Home</li>
+            <li class="nav-btn" data-id="1">Songs</li>
+            <li class="nav-btn" data-id="2">Settings</li>
+        </ul>
+
+        <canvas id="game" style="display:none;"></canvas>
+
+        <div id="reward">
+            <div id="stars">
+                <img src="assets/res/images/star.png" id="star-1" style="display:none;">
+                <img src="assets/res/images/star.png" id="star-2" style="display:none;">
+                <img src="assets/res/images/star.png" id="star-3" style="display:none;">
+                <img src="assets/res/images/starlight.png" id="star-light" style="opacity: 0;">
+            </div>
+
+            <div id="crowns">
+                <img src="assets/res/images/crown.png" id="crown-1" style="display:none;">
+                <img src="assets/res/images/crown.png" id="crown-2" style="display:none;">
+                <img src="assets/res/images/crown.png" id="crown-3" style="display:none;">
+                <img src="assets/res/images/crownlight.png" id="crown-light" style="opacity: 0;">
+            </div>
+        </div>
+
+        <div id="end" style="display:none;">
+            <p class="area" id="songtitle">title</p>
+            <p class="area" id="score">0</p>
+            <div class="area" id="end-buttons">
+                <button id="end-back" title="back">
+                    <img src="assets/res/images/menu.png" alt="back">
+                </button>
+                <button id="end-retry" title="retry">
+                    <img src="assets/res/images/retry.png" alt="retry">
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="script/main.js"></script>
+
+</body>
+
 </html>
