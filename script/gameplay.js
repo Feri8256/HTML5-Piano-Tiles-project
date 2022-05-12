@@ -19,13 +19,21 @@ const songsBaseUrl = "assets/res/songs/";
 const soundsBaseUrl = "assets/res/sounds/";
 const failSound = [48, 52, 55];
 const hitKeys = ["KeyD","KeyF","KeyJ","KeyK"];
+const FPSconstant = 60;
 let mouse = { x: 0, y: 0, click: false };
 let touches = [];
-let s;
+
 let c;
+let frameId;
+let lastFrameTimeStamp = 0;
+let delta = 0;
+let lastFPS = 0;
+let heightSpeedScaling = 0;
+let frameRateSpeedScaling = 0;
+
+let s;
 let scoreCounter;
 let canvasElement;
-let frameId;
 let navBar;
 let screenEnd;
 let previousScreenElement;
@@ -36,7 +44,6 @@ let height = 0;
 let tileWidth = 0;
 let tileHeight = 0;
 let linePos = 0;
-let speedMultiplier = 0;
 let tilesOnScreen = 6
 let currentTile = 0;
 let currentSpeed = 0;
@@ -58,7 +65,7 @@ function initGameplay() {
     height = canvasElement.height = window.innerHeight;
     tileWidth = width * 0.25;
     tileHeight = height * 0.25;
-    speedMultiplier = height / 600;
+    heightSpeedScaling = height / 600;
     linePos = height * 0.75;
     s = new NotePlayer(soundsBaseUrl, "piano/", AudioThing);
     scoreCounter = new ScoreCounter("#f04664", 67, 60, -1.4, 10);
@@ -77,7 +84,7 @@ function handleResize() {
     height = canvasElement.height = window.innerHeight;
     tileWidth = width * 0.25;
     tileHeight = height * 0.25;
-    speedMultiplier = height / 600;
+    heightSpeedScaling = height / 600;
     linePos = height * 0.75;
 }
 
@@ -172,7 +179,7 @@ function fetchSong(filename, id, currentScreen) {
     previousScreenElement = currentScreen;
     console.log("loading song file", filename);
     switcher(currentScreen, canvasElement);
-    frameId = requestAnimationFrame(draw);
+    frameId = requestAnimationFrame(drawLoop);
     fetch(songsBaseUrl + filename)
         .then(res => res.json())
         .then(data => {
@@ -190,7 +197,14 @@ function fetchSong(filename, id, currentScreen) {
         });
 }
 
-function draw() {
+
+
+function drawLoop(timestamp) {
+    delta = timestamp - lastFrameTimeStamp;
+    lastFPS = 1000 / delta;
+    frameRateSpeedScaling = (delta > 100) ? 1 : (FPSconstant / lastFPS);
+    lastFrameTimeStamp = timestamp;
+
     c.clearRect(0, 0, width, height);
 
     switch (state) {
@@ -210,7 +224,7 @@ function draw() {
             for (let i = currentTile; i < currentTile + tilesOnScreen; i++) {
                 if (tiles[i + 1]) tiles[i + 1].y = tiles[i].y - tileHeight;
 
-                tiles[i]?.update(tileWidth, tileHeight, currentSpeed * speedMultiplier, mouse, touches, inGame);
+                tiles[i]?.update(tileWidth, tileHeight, currentSpeed * (heightSpeedScaling * frameRateSpeedScaling), mouse, touches, inGame);
                 tiles[i]?.draw(c);
 
                 if (!tiles[i]?.commandCheck) {
@@ -244,8 +258,9 @@ function draw() {
             c.fillRect(0, linePos, width, 3);
 
             break;
-    }
-    frameId = requestAnimationFrame(draw);
+    }  
+
+    frameId = requestAnimationFrame(drawLoop);
 }
 
 window.addEventListener("keydown", (ev) => {
@@ -279,7 +294,7 @@ window.addEventListener("mouseup", () => {
 });
 
 window.addEventListener("touchstart", (ev) => {
-    ev.preventDefault();
+    
     if (ev.touches.length > 2) return touches = [];
     for (let t of ev.touches) touches.push(t);
 });
