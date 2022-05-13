@@ -142,17 +142,17 @@ export class Tile {
 
         if (this.tileNote.length && this.tileNote[0].n) {
 
-            async function delayed(tn, s, p, df) {
+            async function delayed(tn, h, s, p, df) {
                 let snL = tn.length;
                 //delay = (((1000ms/[framerate])*[tile pixel height])/[currentSpeed])/[# of notes]
-                let snD = ((2500 / s) / snL);
+                let snD = ((16*h)/s)/snL;
 
                 for (let n of tn) {
                     p(n.n);
                     await df(snD);
                 }
             }
-            delayed(this.tileNote, this.cs, this.playNoteFn, this.delayTimer);
+            delayed(this.tileNote, this.h, this.cs, this.playNoteFn, this.delayTimer);
         }
         else {
             this.playNoteFn(this.tileNote);

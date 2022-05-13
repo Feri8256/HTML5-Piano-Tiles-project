@@ -37,6 +37,7 @@ let canvasElement;
 let navBar;
 let screenEnd;
 let previousScreenElement;
+let previousScreenScroll = 0;
 let song;
 let tiles = [];
 let width = 0;
@@ -162,6 +163,7 @@ function gameOverRetry() {
 
 function gameOverBack() {
     switcher(screenEnd, previousScreenElement);
+    window.scrollTo(0, previousScreenScroll);
     displayNavBar();
     c.clearRect(0, 0, width, height);
     rewardCount = 0;
@@ -174,9 +176,10 @@ function gameOverBack() {
     cancelAnimationFrame(frameId);
 }
 
-function fetchSong(filename, id, currentScreen) {
+function fetchSong(filename, id, currentScreen, currentScreenScroll) {
     hideNavBar();
     previousScreenElement = currentScreen;
+    previousScreenScroll = currentScreenScroll;
     console.log("loading song file", filename);
     switcher(currentScreen, canvasElement);
     frameId = requestAnimationFrame(drawLoop);
@@ -216,6 +219,8 @@ function drawLoop(timestamp) {
             break;
 
         case 1:
+            let scaledSpeed = currentSpeed * (heightSpeedScaling * frameRateSpeedScaling);
+
             c.fillStyle = "#ffffff";
             c.fillRect(width * 0.25, 0, 1, height);
             c.fillRect(width * 0.5, 0, 1, height);
@@ -224,7 +229,7 @@ function drawLoop(timestamp) {
             for (let i = currentTile; i < currentTile + tilesOnScreen; i++) {
                 if (tiles[i + 1]) tiles[i + 1].y = tiles[i].y - tileHeight;
 
-                tiles[i]?.update(tileWidth, tileHeight, currentSpeed * (heightSpeedScaling * frameRateSpeedScaling), mouse, touches, inGame);
+                tiles[i]?.update(tileWidth, tileHeight, scaledSpeed, mouse, touches, inGame);
                 tiles[i]?.draw(c);
 
                 if (!tiles[i]?.commandCheck) {

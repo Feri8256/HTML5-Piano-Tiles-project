@@ -76,7 +76,7 @@ function setup() {
     let playButtons = document.querySelectorAll(".play-btn");
     playButtons.forEach(btn => {
         btn.addEventListener("click", (evt) => {
-            fetchSong(evt.target.dataset.filename, evt.target.dataset.id, currentScreen);
+            fetchSong(evt.target.dataset.filename, evt.target.dataset.id, currentScreen, screenScrollPositions[currentScreenId]);
         });
     });
 
