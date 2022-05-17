@@ -109,7 +109,7 @@
             "performer":"Franz Liszt"
         },
         {
-            "id":"00027",
+            "id":"00029",
             "filename":"Korobeiniki.json",
             "name":"Korobeiniki",
             "performer":"Russian Folk Music"
@@ -167,6 +167,18 @@
             "filename":"La Campanella.json",
             "name":"La Campanella",
             "performer":"Franz Liszt"
+        },
+        {
+            "id":"00030",
+            "filename":"Sonata Pathetique Mvt.2.json",
+            "name":"Sonata Pathetique Mvt.2",
+            "performer":"Beethoven"
+        },
+        {
+            "id":"00031",
+            "filename":"William Tell Overture.json",
+            "name":"William Tell Overture",
+            "performer":"Gioachino Rossini"
         }
     ]
 }
