@@ -34,7 +34,7 @@
             "id":"0005",
             "filename":"Heidenroslein.json",
             "name":"Heidenroslein",
-            "performer":"Scubert"
+            "performer":"Schubert"
         },
         {
             "id":"0006",
@@ -77,6 +77,12 @@
             "filename":"Dance of The Sugar Fairy.json",
             "name":"Dance of The Sugar Fairy",
             "performer":"Tchaikovsky"
+        },
+        {
+            "id":"00025",
+            "filename":"Canon.json",
+            "name":"Canon",
+            "performer":"Johann Pachelbel"
         },
         {
             "id":"0012",
@@ -179,6 +185,18 @@
             "filename":"William Tell Overture.json",
             "name":"William Tell Overture",
             "performer":"Gioachino Rossini"
+        },
+        {
+            "id":"00032",
+            "filename":"Eine Kleine Nachtmusik.json",
+            "name":"Eine Kleine Nachtmusik",
+            "performer":"Mozart"
+        },
+        {
+            "id":"00033",
+            "filename":"Prelude in E Major BWV 937.json",
+            "name":"Prelude in E Major BWV 937",
+            "performer":"Bach"
         }
     ]
 }
