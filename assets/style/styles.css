@@ -125,6 +125,7 @@ canvas {
     background-image: linear-gradient(rgb(0, 162, 226), rgb(0, 94, 148));
     top: 0;
     position: absolute;
+    touch-action: none;
 }
 
 #nav {
