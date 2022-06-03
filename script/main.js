@@ -6,9 +6,9 @@
 //
 
 import { loadMenu } from "./menuLoader.js";
+import { loadSettings } from "./settings.js";
 import { initGameOverScreen } from "./endScreen.js";
 import { initGameplay, fetchSong, gameOverBack, gameOverRetry, handleResize, displayNavBar } from "./gameplay.js";
-import { changeGain } from "./audioLoaderAndPlayerThing.js";
 import { initImages } from "./animations.js";
 
 const songListUrl = "assets/res/songlist.json";
@@ -18,7 +18,7 @@ let screenSongs;
 let screenHome;
 let screenSettings;
 let screenEnd;
-let settingsVolumeSlider;
+
 let screens = [];
 let screenScrollPositions = [0, 0, 0, 0];
 let currentScreen;
@@ -33,10 +33,8 @@ function preload() {
     screenHome = document.querySelector("#home");
     screenSettings = document.querySelector("#settings");
     screenEnd = document.querySelector("#end");
-    settingsVolumeSlider = document.querySelector("#vol");
-    settingsVolumeSlider.addEventListener("change", (ev) => {
-        changeGain(parseInt(ev.target.value));
-    });
+    
+    
 
     fetch(songListUrl)
         .then(response => response.json())
@@ -57,21 +55,21 @@ function setup() {
     navButtons.forEach((element) => {
         element.addEventListener("click", (evt) => {
             let screenId = parseInt(evt.target.dataset.id);
-            navButtons.forEach(el => el.classList.remove("active"));
-            evt.target.classList.add("active");
-
-            screens.forEach(s => s.style.display = "none");
-            screens[screenId].style.display = "block";
             currentScreen = screens[screenId];
             currentScreenId = screenId;
-
+            screens.forEach(s => s.style.display = "none");
+            navButtons.forEach(el => el.classList.remove("active"));
+            screens[screenId].style.display = "block";
+            evt.target.classList.add("active");
             window.scrollTo(0, screenScrollPositions[screenId]);
         });
     });
 
+    loadSettings();
     initImages();
     initGameOverScreen(screenEnd, gameOverBack, gameOverRetry)
     initGameplay();
+    
     //Grab every play button and attach click event listener to them
     let playButtons = document.querySelectorAll(".play-btn");
     playButtons.forEach(btn => {

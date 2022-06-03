@@ -200,8 +200,6 @@ function fetchSong(filename, id, currentScreen, currentScreenScroll) {
         });
 }
 
-
-
 function drawLoop(timestamp) {
     delta = timestamp - lastFrameTimeStamp;
     lastFPS = 1000 / delta;
@@ -299,7 +297,6 @@ window.addEventListener("mouseup", () => {
 });
 
 window.addEventListener("touchstart", (ev) => {
-    
     if (ev.touches.length > 2) return touches = [];
     for (let t of ev.touches) touches.push(t);
 });
