@@ -197,6 +197,18 @@
             "filename":"Prelude in E Major BWV 937.json",
             "name":"Prelude in E Major BWV 937",
             "performer":"Bach"
+        },
+        {
+            "id":"00034",
+            "filename":"Magic Flute Op.9.json",
+            "name":"Magic Flute Op.9",
+            "performer":"Mozart"
+        },
+        {
+            "id":"00035",
+            "filename":"Rondo A Capriccio Op.129.json",
+            "name":"Rondo A Capriccio Op.129",
+            "performer":"Beethoven"
         }
     ]
 }
