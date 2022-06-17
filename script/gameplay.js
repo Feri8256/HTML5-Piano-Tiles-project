@@ -18,10 +18,12 @@ import { animation } from "./animations.js";
 const songsBaseUrl = "assets/res/songs/";
 const soundsBaseUrl = "assets/res/sounds/";
 const failSound = [48, 52, 55];
-const hitKeys = ["KeyD","KeyF","KeyJ","KeyK"];
+const hitKeys = ["KeyD", "KeyF", "KeyJ", "KeyK"];
 const FPSconstant = 60;
 let mouse = { x: 0, y: 0, click: false };
 let touches = [];
+
+let linesVisible = false;
 
 let c;
 let frameId;
@@ -57,11 +59,16 @@ let isGameOver = false;
 function dn(n) { s.decodeNote(n); }
 function sc(v) { scoreCounter.add(v); }
 
-function initGameplay() {
+/**
+ * Gameplay setup
+ * @param {Boolean} mobile indicates that the game is opened on a mobile device or not
+ */
+function initGameplay(mobile) {
     navBar = document.querySelector("#nav");
     screenEnd = document.querySelector("#end");
     canvasElement = document.querySelector("canvas");
     c = canvasElement.getContext("2d");
+    linesVisible = !mobile;
     width = canvasElement.width = window.innerWidth;
     height = canvasElement.height = window.innerHeight;
     tileWidth = width * 0.25;
@@ -254,14 +261,16 @@ function drawLoop(timestamp) {
                 scoreCounter.draw(c, width);
             }
 
-            c.fillStyle = "#333333";
-            c.fillRect(0, linePos + 1, width, 3);
+            if (linesVisible) {
+                c.fillStyle = "#333333";
+                c.fillRect(0, linePos + 1, width, 3);
 
-            c.fillStyle = "#ff5522";
-            c.fillRect(0, linePos, width, 3);
+                c.fillStyle = "#ff5522";
+                c.fillRect(0, linePos, width, 3);
+            }
 
             break;
-    }  
+    }
 
     frameId = requestAnimationFrame(drawLoop);
 }

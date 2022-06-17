@@ -67,8 +67,10 @@ function setup() {
 
     loadSettings();
     initImages();
-    initGameOverScreen(screenEnd, gameOverBack, gameOverRetry)
-    initGameplay();
+    initGameOverScreen(screenEnd, gameOverBack, gameOverRetry);
+
+    let { maxTouchPoints } = navigator;
+    initGameplay(maxTouchPoints && maxTouchPoints > 0 ? true : false);
     
     //Grab every play button and attach click event listener to them
     let playButtons = document.querySelectorAll(".play-btn");
