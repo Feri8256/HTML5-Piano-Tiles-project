@@ -221,6 +221,18 @@
             "filename":"Bluestone Alley.json",
             "name":"Bluestone Alley",
             "performer":"Congfei Wei"
+        },
+        {
+            "id":"00038",
+            "filename":"Valse Ballet.json",
+            "name":"Valse Ballet",
+            "performer":"Erik Satie"
+        },
+        {
+            "id":"00039",
+            "filename":"Bagpipe Dance.json",
+            "name":"Bapipe Dance",
+            "performer":""
         }
     ]
 }
