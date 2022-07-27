@@ -87,10 +87,9 @@ export class Tile {
      * @param {Number} h tile height
      * @param {Number} currentSpeed speed in px/frame
      * @param {*} mouse object of current mouse status `{ x: 0, y: 0, click: false }`
-     * @param {Touch[]} touches array of active touch coordinates
      * @param {Boolean} inGame tile cannot be tapped when not in game
      */
-    update(w, h, currentSpeed, mouse, touches, inGame) {
+    update(w, h, currentSpeed, mouse, inGame) {
         this.x = w * this.tilePos;
         this.w = w;
         this.h = h;
@@ -113,18 +112,6 @@ export class Tile {
         ) {
             if (mouse.click) {
                 this.tap();
-            }
-        }
-
-        for (let t of touches) {
-            if (
-                t.clientX >= this.x &&
-                t.clientX <= this.x + this.w &&
-                t.clientY >= this.y - this.h &&
-                t.clientY <= this.y
-            ) {
-                this.tap();
-                break;
             }
         }
     }

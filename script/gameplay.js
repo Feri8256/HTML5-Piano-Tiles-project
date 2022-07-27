@@ -129,7 +129,9 @@ function setGameStart() {
     tiles[0].startingTile = true;
 }
 
-function setSpeedAtStart() { currentSpeed = song.baseSpeed; }
+function setSpeedAtStart() {
+    currentSpeed = song.baseSpeed;
+}
 
 function addSpeed() { currentSpeed += song.speedIncrement; }
 
@@ -234,7 +236,24 @@ function drawLoop(timestamp) {
             for (let i = currentTile; i < currentTile + tilesOnScreen; i++) {
                 if (tiles[i + 1]) tiles[i + 1].y = tiles[i].y - tileHeight;
 
-                tiles[i]?.update(tileWidth, tileHeight, scaledSpeed, mouse, touches, inGame);
+                // Touch check loop
+                for (let t of touches) {
+                    if (
+                        t.clientX >= tiles[i]?.x &&
+                        t.clientX <= tiles[i]?.x + tiles[i]?.w &&
+                        t.clientY >= tiles[i]?.y - tiles[i]?.h &&
+                        t.clientY <= tiles[i]?.y &&
+                        !tiles[i]?.tapped
+                    ) {
+                        tiles[i]?.tap();
+
+                        // Remove the registered touch from the touches array and exit from the touch check loop
+                        touches.splice(touches.findIndex(dt => dt.identifier === t.identifier), 1);
+                        break;
+                    }
+                }
+
+                tiles[i]?.update(tileWidth, tileHeight, scaledSpeed, mouse, inGame);
                 tiles[i]?.draw(c);
 
                 if (!tiles[i]?.commandCheck) {

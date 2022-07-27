@@ -232,7 +232,31 @@
             "id":"00039",
             "filename":"Bagpipe Dance.json",
             "name":"Bapipe Dance",
-            "performer":""
+            "performer":"Leopold Mozart"
+        },
+        {
+            "id":"00040",
+            "filename":"Humoresque No.7.json",
+            "name":"Humoresque No.7",
+            "performer":"Antonín Dvořák, Joseph Cooper"
+        },
+        {
+            "id":"00041",
+            "filename":"Liebestraum No.3.json",
+            "name":"Liebestraum No.3",
+            "performer":"Liszt"
+        },
+        {
+            "id":"00042",
+            "filename":"Russian Dance.json",
+            "name":"Russian Dance",
+            "performer":"Tchaikovsky"
+        },
+        {
+            "id":"00043",
+            "filename":"The Blue Danube.json",
+            "name":"The Blue Danube",
+            "performer":"Johann Strauss II"
         }
     ]
 }
