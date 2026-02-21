@@ -120,7 +120,7 @@ export class Tile {
      * Registers tap.
      * Responsible for commanding note playback.
      */
-    tap() {
+    tap(currentDeltaTime) {
         if (this.tileType === 0 && !this.startingTile) return;
         if (this.startingTile) this.gameStartFn();
         if (this.tapped) return;
@@ -129,17 +129,17 @@ export class Tile {
 
         if (this.tileNote.length && this.tileNote[0].n) {
 
-            async function delayed(tn, h, s, p, df) {
+            async function delayed(tn, h, s, p, df, dt) {
                 let snL = tn.length;
-                //delay = (((1000ms/[framerate])*[tile pixel height])/[currentSpeed])/[# of notes]
-                let snD = ((16*h)/s)/snL;
+                //delay = (([deltaTime]*[tile pixel height]))/[currentSpeed])/[# of notes]
+                let snD = ((dt * h) / s) / snL;
 
                 for (let n of tn) {
                     p(n.n);
                     await df(snD);
                 }
             }
-            delayed(this.tileNote, this.h, this.cs, this.playNoteFn, this.delayTimer);
+            delayed(this.tileNote, this.h, this.cs, this.playNoteFn, this.delayTimer, currentDeltaTime);
         }
         else {
             this.playNoteFn(this.tileNote);

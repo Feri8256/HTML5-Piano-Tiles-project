@@ -245,7 +245,7 @@ function drawLoop(timestamp) {
                         t.clientY <= tiles[i]?.y &&
                         !tiles[i]?.tapped
                     ) {
-                        tiles[i]?.tap();
+                        tiles[i]?.tap(delta);
 
                         // Remove the registered touch from the touches array and exit from the touch check loop
                         touches.splice(touches.findIndex(dt => dt.identifier === t.identifier), 1);
@@ -300,7 +300,7 @@ window.addEventListener("keydown", (ev) => {
         for (let c = currentTile; c < currentTile + 3; c++) {
             let chkKey = tiles[c].tilePos;
             if (k === hitKeys[chkKey] && tiles[c].y >= linePos) {
-                tiles[c].tap();
+                tiles[c].tap(delta);
             }
         }
     }
