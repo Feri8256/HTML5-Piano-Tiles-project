@@ -1,5 +1,4 @@
 ## HTML5 Piano Tiles projekt   
-### 👉[https://html5-piano-tiles.glitch.me/](https://html5-piano-tiles.glitch.me/)👈
 ### Rövid leírás   
 Böngészőben futó, funkcióiban és megjelenésében leegyszerűsített Piano Tiles-klón, amely lényegben próbál hasonlítani az eredeti alkalmazásra.   
 
